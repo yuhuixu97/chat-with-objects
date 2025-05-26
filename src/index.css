@@ -1,0 +1,1265 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --vh: 100%;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  width: 100vw;
+  max-width: 768px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --vh: 100vh;
+  }
+}
+
+.full-height {
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+/* 夜间模式 */
+@media (prefers-color-scheme: dark) {
+  .chat-page {
+    background-color: #181818;
+    color: #ffffff;
+  }
+
+  .message-content {
+    background-color: #2a2a2a;
+    color: #fff;
+  }
+
+  .bottom-navbar {
+    background-color: #181818;
+  }
+
+  .chat-preview {
+    color: #cccccc;
+  }
+
+  /* 箭头颜色适配 */
+  .back-btn {
+    color: #cccccc;
+  }
+
+  .done-btn {
+    color: #cccccc;
+  }
+}
+
+/*ChatPage --------------------------------*/
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  height: 100vh;
+}
+
+.chat-page {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.chat-messages {
+  flex-grow: 1;
+
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.chat-messages::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* 消息框 */
+.message {
+  display: flex;
+  align-items: flex-start;
+  max-width: 85%;
+  width: fit-content;
+  word-wrap: break-word; /* 让长文本换行 */
+  word-break: break-word; /* 长单词也能换行 */
+}
+
+/* 头像 */
+.message-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px; /* 确保头像不会被压缩 */
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+  margin-left: 8px;
+  overflow: hidden;
+}
+
+.message-avatar img.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 让图片填满头像框 */
+  border-radius: 50%;
+}
+
+/* 消息内容 */
+.message-content {
+  display: inline-block;
+  /*padding: 12px;
+  padding-top: 8px;
+  padding-bottom: 10px;*/
+  border-radius: 4px;
+  width: fit-content;
+  /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+  word-wrap: break-word; /* 强制单词换行 */
+  word-break: break-word; /* 如果单词过长，则在单词内部换行 */
+  white-space: pre-wrap; /* 允许换行 */
+  /* max-width: 100%; 限制最大宽度 */
+  overflow-wrap: break-word; /* 防止文字溢出 */
+  box-sizing: border-box; /* 确保padding不会影响布局 */
+}
+
+/* 其他人的消息 */
+.other-message {
+  align-self: flex-start;
+  flex-direction: row;
+}
+
+.other-message .message-content {
+  background: white;
+  display: inline-block;
+  width: fit-content;
+  word-wrap: break-word; /* 强制单词换行 */
+  word-break: break-word; /* 如果单词过长，则在单词内部换行 */
+  white-space: normal; /* 允许换行 */
+}
+
+/* 自己的消息 */
+.my-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.my-message .message-avatar {
+  background-color: #ffffff;
+}
+
+.my-message .message-content {
+  /*background: #85e49e;*/
+  background: #fad6a0;
+}
+
+.message-text {
+  display: inline-block;
+  font-size: 15px;
+  width: fit-content;
+  word-wrap: break-word; /* 确保长文本可以换行 */
+  word-break: break-word; /* 确保长单词可以换行 */
+  line-height: 1.45; /* 这里设置行间距 */
+  white-space: normal;
+  color: #323232;
+  padding: 12px;
+  padding-top: 8px;
+  padding-bottom: 10px;
+}
+
+/* 输入框 */
+.chat-input {
+  display: flex;
+  padding: 10px;
+  /*background: white;
+  border-top: 1px solid #ddd;*/
+}
+
+.chat-input input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 0px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.chat-input input::placeholder {
+  color: #c3c3c3; /* 灰色 */
+  opacity: 1; /* 防止有些浏览器默认透明 */
+}
+
+.chat-input button {
+  all: unset;
+  width: 42px;
+  height: 42px;
+  /*background-color: #007bff;*/
+  background-color: #fe8f10;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat-input .send-button {
+  background-color: rgb(174, 174, 174); /* 默认灰色 */
+  color: white;
+  cursor: not-allowed; /* 禁止点击 */
+  transition: background-color 0.1s, transform 0.2s ease, box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.chat-input .send-button:active {
+  transform: scale(1.1);
+  filter: brightness(98%);
+}
+
+.chat-input .send-button.active {
+  background-color: #fe8f10; /* 蓝色，表示可点击 */
+  cursor: pointer;
+}
+
+.chat-input .send-button:disabled {
+  background-color: rgb(185, 185, 185); /* 确保禁用时还是灰色 */
+  cursor: not-allowed;
+}
+
+.chat-input button:hover {
+  background-color: #0056b3;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  background-color: #f5f5f5;
+}
+
+/*ChatList --------------------------------*/
+
+/* 确保整体居中 */
+.chat-list-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: #f5f5f5;
+  overflow: hidden; /* 防止页面本身滚动 */
+}
+
+.chat-list-title {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  /*margin-bottom: 20px;*/
+}
+
+/* 聊天列表 */
+.chat-list {
+  width: 100%;
+  min-width: 320px; /* 保证不会被过度压缩 */
+  max-width: 600px; /* 可选，防止在大屏设备上太宽 */
+  margin: 0 auto; /* 如果用了 max-width，可以居中显示 */
+  display: flex;
+  flex-direction: column;
+  /*gap: 2px;*/
+  flex: 1; /* 让聊天列表占据剩余空间 */
+  overflow-y: auto; /* 聊天列表过长时可滚动 */
+}
+
+.chat-list::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+/* 单个聊天项 */
+.chat-card {
+  display: flex;
+  align-items: center;
+  min-width: 140px;
+  /*background: white;*/
+  padding: 12px;
+  /*border-radius: 4px;*/
+  /*box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);*/
+  cursor: pointer;
+  transition: background 0.3s;
+  border-bottom: 1px solid rgb(230, 230, 230); /* 添加底部边框 */
+}
+
+.chat-card:hover {
+  background: #e0e0e0;
+}
+
+/* 头像 */
+.chat-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #202020;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  overflow: hidden;
+}
+
+.chat-avatar img.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 让图片填满头像框 */
+  border-radius: 50%;
+}
+
+/* 聊天信息 */
+.chat-info {
+  flex-grow: 1;
+}
+
+.chat-title {
+  max-width: 120px;
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap; /* 防止文本换行 */
+  overflow: hidden; /* 隐藏超出文本框的内容 */
+  text-overflow: ellipsis; /* 用省略号表示超出的部分 */
+}
+
+.chat-preview {
+  max-width: 200px;
+  font-size: 14px;
+  color: rgb(121, 121, 121);
+  white-space: nowrap; /* 防止文本换行 */
+  overflow: hidden; /* 隐藏超出文本框的内容 */
+  text-overflow: ellipsis; /* 用省略号表示超出的部分 */
+}
+
+.my-profile-page {
+  width: 100%;
+  min-width: 320px; /* 保证不会被过度压缩 */
+  max-width: 600px; /* 可选，防止在大屏设备上太宽 */
+  margin: 0 auto; /* 如果用了 max-width，可以居中显示 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /*gap: 2px;*/
+  flex: 1; /* 让聊天列表占据剩余空间 */
+  overflow-y: auto; /* 聊天列表过长时可滚动 */
+}
+
+.my-profile-photo {
+  width: 120px; /* 容器的宽度 */
+  height: 120px; /* 容器的高度 */
+  overflow: hidden; /* 隐藏超出容器的部分 */
+  border-radius: 50%; /* 圆形 */
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
+
+.my-profile-btn {
+  width: 288px;
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 (如果需要的话) */
+  margin: 4px;
+}
+
+.my-profile-btn-logout {
+  width: 288px;
+  border: none;
+  background-color: #ebebeb;
+  cursor: pointer;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 (如果需要的话) */
+  margin-top: 64px;
+}
+
+/* 新建聊天按钮 */
+.add-chat-btn {
+  all: unset;
+  width: 60px;
+  height: 60px;
+  align-self: center;
+  border: none;
+  border-radius: 50%;
+  /*background-color: #007bff;*/
+  /*background-color: #ffac4e;*/
+  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+/* 点击动画：放大、变透明 */
+.add-chat-btn.clicked {
+  transform: scale(3);
+  opacity: 0;
+}
+
+.add-chat-btn:hover {
+  /*background-color: #0056b3;*/
+  background-color: #ed850e;
+}
+
+.main-area {
+  width: 100%;
+  /*max-width: 400px;*/
+  max-width: calc(100vw - 16px);
+  display: flex;
+  gap: 2px;
+  flex: 1; /* 让聊天列表占据剩余空间 */
+  overflow-y: auto; /* 聊天列表过长时可滚动 */
+  /*padding: 10px;*/
+  flex-direction: column; /* 垂直排列 */
+  align-items: center; /* 让按钮水平居中 */
+  height: 100vh; /* 占满整个视口高度，使其居中 */
+}
+
+/*PromptingPage CSS---------------------------------------------------*/
+
+.prompting-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 垂直从上往下排列 */
+  height: 100vh;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  /*background-color: white;*/
+  position: relative;
+}
+
+.prompt-text {
+  font-size: 18px;
+  color: #303030;
+  margin: 0;
+}
+
+.prompt-area {
+  height: 200px;
+  width: 100%;
+  max-width: calc(100% - 32px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  /* 添加阴影 */
+  box-shadow: 0px 16px 28px rgba(188, 188, 188, 0.1); /* 水平偏移、垂直偏移、模糊半径、阴影颜色 */
+}
+
+.prompt-highlight {
+  font-size: 22px;
+  font-weight: bold;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 10px 0;
+  color: #ffffff;
+  text-align: center;
+  /*color: #333333;*/
+  line-height: 1.3; /* 或者用像素，比如 24px */
+  word-wrap: break-word; /* 强制单词换行 */
+  word-break: break-word; /* 如果单词过长，则在单词内部换行 */
+  white-space: normal; /* 允许换行 */
+  /* max-width: 100%; 限制最大宽度 */
+  max-width: 220px;
+  overflow-wrap: break-word; /* 防止文字溢出 */
+  box-sizing: border-box; /* 确保padding不会影响布局 */
+}
+
+.prompt-subtext {
+  font-size: 18px;
+  color: #666;
+  margin: 0;
+}
+
+.prompting-page-block {
+  width: 100%;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse-animation {
+  animation: pulse 0.2s ease-in-out;
+}
+
+.camera-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 垂直从上往下排列 */
+  height: 100vh;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  /*background-color: white;*/
+  position: relative;
+  background-color: #1a1a1a;
+}
+
+.photo-btn {
+  all: unset;
+  box-sizing: border-box; /* ✅ 添加这一行 */
+  height: 72px;
+  width: 72px;
+  background-color: #ddd;
+  border: none;
+  padding: 16px;
+  margin: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo-page {
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 (如果需要的话) */
+  height: 180px;
+  display: flex;
+}
+
+.photo-page-done {
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 (如果需要的话) */
+  height: 180px;
+  display: flex;
+}
+
+.captured-photo-area {
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 (如果需要的话) */
+  height: 120px;
+  display: flex;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.photo-display-round {
+  width: 120px; /* 容器的宽度 */
+  height: 120px; /* 容器的高度 */
+  overflow: hidden; /* 隐藏超出容器的部分 */
+  border-radius: 50%; /* 圆形 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  position: absolute;
+}
+
+.photo-display-round img {
+  width: 100%; /* 让图片适应容器宽度 */
+  height: 100%; /* 让图片适应容器高度 */
+  object-fit: cover; /* 确保图片覆盖容器并保持其比例 */
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  position: absolute;
+}
+
+.prompting-btn-area {
+  justify-items: center;
+  flex-direction: row;
+  display: flex;
+}
+
+.prompting-regenerate-btn {
+  height: 80px;
+  width: 80px;
+  margin: 16px;
+  background-color: #ffffff;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.prompting-regenerate-btn:active {
+  transform: scale(1.1);
+  filter: brightness(98%);
+}
+
+.prompting-camera-btn {
+  height: 80px;
+  width: 80px;
+  margin: 16px;
+  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.prompting-camera-btn:active {
+  transform: scale(1.1);
+  filter: brightness(98%);
+}
+
+.navbar {
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  /*border-bottom: 1px solid #ddd;*/
+  position: relative; /* 让子元素可以使用 absolute 定位 */
+  top: env(safe-area-inset-top, 0); /* 避开 iPhone notch / Safari navbar */
+}
+
+/* 返回按钮样式 */
+.navbar .back-btn {
+  all: unset;
+  color: #273d50;
+  position: absolute;
+  left: 8px;
+  background: none;
+
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  padding-left: 0px;
+  padding-right: 16px;
+  border: none;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar .done-btn {
+  all: unset;
+  color: #213547;
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  transition: transform 0.2s ease;
+}
+
+.navbar .done-btn:active {
+  transform: scale(1.1);
+}
+
+.navbar .chat-header {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 16px;
+  /*background-color: #007bff;
+  color: white;*/
+  flex-grow: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* 确保文本始终居中 */
+  white-space: nowrap; /* 防止换行 */
+  overflow: hidden;
+  text-overflow: ellipsis; /* 过长时显示省略号 */
+  max-width: 50%; /* 避免太长影响布局 */
+}
+
+.navbar .more-btn {
+  all: unset;
+  color: #273d50;
+  position: absolute;
+  right: 8px;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  padding-left: 4px;
+  padding-right: 4px;
+  border: none;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.storytext {
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  margin: 0;
+  padding-top: 16px;
+  padding-bottom: 8px;
+}
+
+.story-input {
+  font-family: "Arial", sans-serif; /* 设置字体为 Arial */
+  flex-grow: 1;
+  padding: 10px;
+  width: 216px;
+  min-height: 88px;
+  border: none;
+  border-radius: 8px;
+  resize: vertical; /* 允许用户垂直拖拽调整高度 */
+}
+
+.story-input::placeholder {
+  color: #c3c3c3; /* 灰色 */
+  opacity: 1; /* 防止有些浏览器默认透明 */
+}
+
+.name-input {
+  font-family: "Arial", sans-serif; /* 设置字体为 Arial */
+  flex-grow: 1;
+  width: 216px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+}
+
+.name-input::placeholder {
+  color: #c3c3c3; /* 灰色 */
+  opacity: 1; /* 防止有些浏览器默认透明 */
+}
+
+.descriptives-input {
+  font-family: "Arial", sans-serif; /* 设置字体为 Arial */
+  flex-grow: 1;
+  padding: 10px;
+  width: 216px;
+  min-height: 88px;
+  border: none;
+  border-radius: 8px;
+  resize: vertical; /* 允许用户垂直拖拽调整高度 */
+}
+
+.descriptives-input::placeholder {
+  color: #c3c3c3; /* 灰色 */
+  opacity: 1; /* 防止有些浏览器默认透明 */
+}
+
+#loading-indicator {
+  text-align: center;
+  font-size: 14px;
+  color: gray;
+}
+
+.message-assistant {
+  background-color: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 10px;
+}
+
+.story-page {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  width: 100%;
+  height: 100vh;
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-start;
+  align-items: center;
+  height: 10px;
+}
+
+.typing-indicator span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #888;
+  border-radius: 50%;
+  animation: blink 1.4s infinite both;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.message.assistant {
+  /*display: flex;
+  justify-content: center;
+  align-items: center; */
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.selection-btn {
+  background-size: cover;
+  font-size: 18px;
+  height: 240px;
+  width: 240px;
+  /*background-color: #ffac4e;*/
+  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  margin: 8px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  /*box-shadow: 0px 16px 28px rgba(74, 74, 74, 0.1); /* 水平偏移、垂直偏移、模糊半径、阴影颜色 */
+}
+
+.selection-btn:active {
+  transform: scale(0.98);
+  filter: brightness(98%);
+}
+
+.selection-btn-2 {
+  height: 64px;
+  width: 240px;
+  background-color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.selection-btn-2:active {
+  transform: scale(0.98);
+  filter: brightness(98%);
+}
+
+.video-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black; /* 相机背景常用黑色 */
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.video-container video {
+  object-fit: cover; /* 填满容器，不变形 */
+  width: 100%;
+  height: 100%;
+}
+
+.nav-bar2 {
+  width: 100%;
+  height: 60px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  position: relative; /* 让子元素可以使用 absolute 定位 */
+  background-color: #f5f5f5;
+  /*border-bottom: 1px solid #ddd;*/
+  justify-content: center;
+  top: env(safe-area-inset-top, 0); /* 避开 iPhone notch / Safari navbar */
+}
+
+.nav-bar2 .back-btn {
+  all: unset;
+  color: #273d50;
+  position: absolute;
+  left: 8px;
+  background: none;
+
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  padding-left: 0px;
+  padding-right: 16px;
+  border: none;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*完成按钮样式*/
+.nav-bar2 .done-btn {
+  position: absolute;
+  right: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+  transition: transform 0.2s ease;
+}
+
+.nav-bar2 .done-btn:active {
+  transform: scale(1.1);
+}
+
+.nav-bar2 .done-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.story-input-area {
+  display: flex;
+  flex-direction: column; /* 子元素垂直排列 */
+  align-items: center; /* 水平居中对齐 */
+  text-align: center; /* 让文字等内容也居中 */
+  padding: 16px; /* 可选：增加内部空隙 */
+  box-sizing: border-box; /* 避免padding撑大容器 */
+}
+
+.start-chat-btn {
+  width: 215px;
+  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 (如果需要的话) */
+  margin: 0 auto; /* 按钮本身居中 */
+}
+
+.avatar-selection-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.title {
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  max-width: 300px; /* 或者更大 */
+  margin: 0 auto; /* 居中 */
+}
+
+.avatar-item {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* 保证正方形 */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.avatar-item.selected {
+  background-color: #ffd7a9;
+  transform: scale(1.15);
+}
+
+/* 固定在页面底部 */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: rgb(211, 211, 211); /* 文字颜色 */
+  text-align: center; /* 文字居中 */
+  padding: 8px; /* 内边距 */
+  font-size: 10px;
+}
+
+/*----------------------------------*/
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  width: 240px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.modal-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.bottom-navbar {
+  bottom: 0;
+  width: 100%; /* 关键是设定固定宽度 */
+  height: 96px;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-shrink: 0; /* 不压缩 */
+}
+
+.bottom-nav-item {
+  display: flex;
+  min-width: 33%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+/*
+.bottom-nav-item:active {
+  background-color: #d2d2d2;
+}*/
+
+.camera-bottom-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.camera-bottom-bar-item {
+  min-width: 33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reverse-camera-btn {
+  color: #ffffff;
+  background: none;
+  cursor: pointer;
+  border: none;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: #949494;
+  border-radius: 50%;
+  animation: dot-animation 1s infinite ease-in-out;
+}
+
+/* 补全并修改为新的动画名称 */
+@keyframes dot-animation {
+  0% {
+    transform: scale(1);
+    opacity: 0.7; /* 设置透明度为70% */
+  }
+  50% {
+    transform: scale(1.5); /* 圆点增大到1.5倍 */
+    opacity: 1; /* 透明度增大到100% */
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7; /* 还原到原始透明度 */
+  }
+}
+
+.login-button {
+  width: 236px;
+  border: none;
+  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+  cursor: pointer;
+  color: #ffffff;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 (如果需要的话) */
+  border-radius: 8px;
+  transition: background-color 0.1s, transform 0.2s ease, filter 0.2s ease;
+}
+
+.login-button:active {
+  transform: scale(1.04);
+  filter: brightness(98%);
+}
+
+.login-button:disabled {
+  background: rgb(212, 212, 212); /* 确保禁用时还是灰色 */
+  cursor: not-allowed;
+}
+
+.text-n-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* 所有子元素左对齐 */
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-buttons button {
+  margin: 4px;
+  width: 104px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modal-buttons button:first-child {
+  background-color: #ff4851;
+  color: white;
+}
+
+.modal-buttons button:last-child {
+  background-color: #eee;
+}
