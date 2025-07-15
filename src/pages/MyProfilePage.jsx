@@ -11,6 +11,7 @@ import { getResourceId } from "../resource"; // 导入设置方法
 import { GoPlus } from "react-icons/go";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { AiOutlineUser } from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
 
 let resource_id = "";
 
@@ -64,7 +65,6 @@ export default function MyProfilePage() {
   const handleButtonClick = () => {
     setClicked(true); // 添加动画 class
     setTimeout(() => {
-      //navigate("/SelectingPage");
       navigate("/SelectingPage");
     }, 450); // 跳转延迟，和动画匹配
   };
@@ -90,12 +90,21 @@ export default function MyProfilePage() {
         >
           <img src={userAvatar} alt="Captured" />
         </div>
-        <p style={{ paddingBottom: "16px" }}></p>
         <button
-          className="my-profile-btn"
+          className="my-profile-btn-avatar"
           onClick={() => navigate("/AvatarSelectionPage")}
+          style={{ marginBottom: "24px" }}
         >
-          Set user avatar
+          Change avatar
+        </button>
+        <button
+          className="my-profile-btn-note"
+          onClick={() =>
+            navigate("/NotePage", { state: { resource_id: resource_id } })
+          }
+        >
+          <AiFillEdit style={{ marginRight: "8px" }} />
+          Send note
         </button>
         <button
           className="my-profile-btn-logout"

@@ -29,6 +29,7 @@ export default function ChatPage() {
   const location = useLocation();
   // 从 location.state 获取传递的 imageUrl, objectName, objectDescription, newChat_id
   const { objectName } = location.state || {};
+  const { resource_id } = location.state || {}; // 从 ChatList 获得 resource_id
 
   //const chat = chatData[id] || { name: "Unknown", messages: [] };
   //const [messages, setMessages] = useState(chat.messages);
@@ -44,9 +45,10 @@ export default function ChatPage() {
   const [objectFacts, setObjectFacts] = useState(""); // 新增状态来保存更新后的 object facts
   const [userFacts, setUserFacts] = useState(""); // 新增状态来保存更新后的 user facts
   const [loading, setLoading] = useState(false);
+  //const [resource_id, setResourceId] = useState("");
 
-  //let resource_id = "uac633de71b774f31";
-  let resource_id = "";
+  //let resource_id = "uac633de71b774f31"; // developer
+  //let resource_id = "";
   const api_key_AI =
     "df-aGlQOG1TcDVnRVZOS0FCRHVVOCtxZlBGVHFCeW1zV3l2V2tGTWhVc3RIVT0=";
   const url = `https://data.id.tue.nl/datasets/entity/14395/item/`;
@@ -64,10 +66,17 @@ export default function ChatPage() {
   const [recentChatHistory, setrecentChatHistory] = useState("");
 
   // 页面加载时获取 resource_id
-  useEffect(() => {
+  /*useEffect(() => {
     resource_id = getResourceId();
-    console.log("resource_id: ", resource_id);
-  }, []);
+    console.log("resource_id get: ", resource_id);
+  }, []);*/
+
+  // 页面加载时获取 resource_id
+  /*useEffect(() => {
+    const id = getResourceId();
+    setResourceId(id);
+    console.log("resource_id set: ", id);
+  }, []);*/
 
   useEffect(() => {
     if (!conversation_id) {
@@ -79,6 +88,7 @@ export default function ChatPage() {
 
     if (!hasFetched.current) {
       getData(conversation_id); // 通过 id 获取聊天数据
+      console.log("Getting data...");
       getUserData();
       hasFetched.current = true;
     }
@@ -154,7 +164,7 @@ export default function ChatPage() {
 
           console.log("Chat history: ", formattedHistory);
         } else {
-          console.warn(`Conversation ${conversation_id} not found.`);
+          console.warn(`Conversation ${conversation_id} not found.1`);
         }
       },
       error: function (e) {
@@ -189,7 +199,7 @@ export default function ChatPage() {
         console.log("userAvatar fetched: ", data.user_avatar_url);
       },
       error: function (e) {
-        console.log("Error fetching data:", e);
+        console.error("Error fetching data:", e);
       },
     });
   };
@@ -249,9 +259,11 @@ export default function ChatPage() {
       // 把新的user conversation发送到数据库
       //updateConversationInDatabase(userDataModel.user_id, conversation);
 
+      console.log("resource_id before updateUserConversation: ", resource_id); //log显示，resource_id在这里就已经是空了
       updateUserConversation(
         userDataModel.user_id,
         conversation_id,
+        resource_id,
         conversation
       );
 
@@ -316,10 +328,12 @@ export default function ChatPage() {
       lastMessageRef.current = newMessage;
     }
   };
+
   // 把最新的一条消息更新到user conversation data中
   const updateUserConversation = (
     user_id,
     conversation_id,
+    resource_id,
     newConversation,
     callback
   ) => {
@@ -362,6 +376,7 @@ export default function ChatPage() {
         },
         error: function (err) {
           console.error("Error updating user conversations", fetchedUserData);
+          console.error("Resource_id: ", resource_id);
         },
       });
     });
@@ -377,18 +392,18 @@ export default function ChatPage() {
     // console.log("User: ", userConversations);
 
     // 找到该 conversation
-    const conversation = userConversations.find(
+    const conversation1 = userConversations.find(
       (conv) => String(conv.conversation_id) === String(conversationId)
     );
 
-    if (conversation) {
+    if (conversation1) {
       // 将新消息添加到 conversation 的 messages 中
-      conversation.messages.push(newMessage);
+      conversation1.messages.push(newMessage);
       // 将更新后的 userFacts，objectFacts 都存入 conversation
       //conversation.object_facts = objectFacts;
-      conversation.user_facts = userFacts;
+      conversation1.user_facts = userFacts;
       // 调用 sendData 保存更新后的 conversation
-      sendData(conversation);
+      sendData(conversation1);
     } else {
       console.error(`Conversation not found. ID: ${conversationId}`);
       console.log("Available conversations:", userConversations);
@@ -397,7 +412,7 @@ export default function ChatPage() {
     }
   };
 
-  const sendAIMessage = (conversationId, newMessages) => {
+  const sendAIMessage = (conversationId, newAiMessages) => {
     if (!userConversations.length) {
       console.error("User conversations not loaded yet.");
       return;
@@ -409,7 +424,7 @@ export default function ChatPage() {
 
     if (conversation) {
       // 将新消息添加到 conversation 的 messages 中
-      conversation.messages.push(...newMessages);
+      conversation.messages.push(...newAiMessages);
       // 将更新后的 userFacts，objectFacts 都存入 conversation
       //conversation.object_facts = objectFacts;
       conversation.user_facts = userFacts;
@@ -481,7 +496,7 @@ export default function ChatPage() {
 
             for (let i = 0; i < newAiMessages.length; i++) {
               const msg = newAiMessages[i];
-              const delay = msg.content.length * 100;
+              const delay = msg.content.length * 80;
 
               await new Promise((resolve) => setTimeout(resolve, delay));
 
@@ -528,11 +543,9 @@ export default function ChatPage() {
               //conversation.messages.push(newAiMessage);
               conversation.messages.push(lastAiSentence);
               console.log("conversation.messages: ", conversation.messages);
-            } else if (conversation.messages.length === 1) {
-              conversation.messages[0] = lastAiSentence; // 替换唯一元素
-              console.log("conversation.messages: ", conversation.messages);
             } else {
-              console.warn("messages is longer than 1");
+              conversation.messages = [lastAiSentence]; // 替换唯一元素
+              console.log("conversation.messages: ", conversation.messages);
             }
           } else {
             console.error("Conversation not found.");
@@ -543,6 +556,7 @@ export default function ChatPage() {
           updateUserConversation(
             userDataModel.user_id,
             conversation_id,
+            resource_id,
             conversation
           );
 
@@ -646,7 +660,7 @@ export default function ChatPage() {
           <button
             className="more-btn"
             onClick={() =>
-              navigate("/ObjectEditingPage", { state: conversation_id })
+              navigate("/ObjectEditingPage", { state: { conversation_id } })
             }
           >
             <AiOutlineEllipsis size={24} />

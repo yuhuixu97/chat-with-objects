@@ -46,7 +46,7 @@ export default function AvatarSelectionPage() {
   useEffect(() => {
     const id = getResourceId(); // 页面加载时获取 resource_id
     setResourceId(id);
-    console.log("Resource_id set: ", resource_id);
+    console.log("Resource_id set: ", id);
   }, []);
 
   const handleAvatarClick = (avatar) => {
@@ -124,7 +124,7 @@ export default function AvatarSelectionPage() {
                   alt="Selected Avatar"
                   className="modal-avatar"
                 />
-                <p style={{ fontSize: "14px" }}>Jumping to the next page</p>
+                <p style={{ fontSize: "14px" }}>Jumping to the next page...</p>
               </div>
             </div>
           )}

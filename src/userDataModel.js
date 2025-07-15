@@ -79,7 +79,9 @@ function fetchUserData(userId, callback) {
     error: function (err) {
       console.error("Error fetching user data:", err);
       console.log("Creating new user due to fetch error...");
-      createNewUser(userId, "New User", callback);
+      createNewUser((user) => {
+        console.log("callback user:", user);
+      });
     },
   });
 }
@@ -202,6 +204,7 @@ function storeConversationSeparately(newConversation) {
 
 export {
   userDataModel,
+  createNewUser,
   addConversation,
   initializeUser,
   updateConversationInDatabase,

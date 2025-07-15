@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import $ from "jquery";
 import {
+  createNewUser,
   userDataModel,
+  fetchUserData,
   addConversation,
   initializeUser,
 } from "../userDataModel";
@@ -49,15 +51,23 @@ export default function LoginPage() {
   }, []);
 
   const handleLogin = () => {
-    // 假设验证成功的条件是 vcode 和 pId 都非空
+    // 登录验证：假设验证成功的条件是 vcode 和 pId 都非空
     if (vcode.trim() && pid.trim()) {
       const expectedVcode = matchingTable.find(
         (entry) => entry.Pid === pid.trim()
       );
       console.log(pid, vcode, expectedVcode);
+      // 登录成功：pId 和 vcode 都匹配
       if (expectedVcode && expectedVcode.Vcode === vcode.trim()) {
         setResourceId(expectedVcode.resource_id); // 重新设置全局变量
         setLoginHint("Login successfully. Welcome!"); // 验证成功显示消息
+
+        //去数据库查询，如果没有这个resource_id下的user，则创建一个
+        fetchUserData(expectedVcode.resource_id, (data) => {
+          console.log("fetchUserData callback data:", data);
+          // 你可以在这里调用 setState 或其他逻辑
+        });
+
         setTimeout(() => {
           navigate("/");
         }, 1500);
@@ -79,7 +89,9 @@ export default function LoginPage() {
   return (
     <div className="chat-list-container full-height">
       <div className="my-profile-page">
-        <h1 style={{ fontSize: "24px", padding: "64px" }}>Chat with objects</h1>
+        <h1 style={{ fontSize: "24px", padding: "64px", fontStyle: "italic" }}>
+          ObChat!
+        </h1>
         <div className="text-n-input">
           <p
             className="storytext"
@@ -89,7 +101,7 @@ export default function LoginPage() {
               marginLeft: "8px",
             }}
           >
-            Enter your participant ID
+            Participant ID
           </p>
           {/* 文本框部分 */}
           <input
@@ -115,7 +127,7 @@ export default function LoginPage() {
               marginLeft: "8px",
             }}
           >
-            Enter the verification code
+            Verification code
           </p>
           {/* 文本框部分 */}
           <input

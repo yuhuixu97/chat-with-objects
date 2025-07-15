@@ -65,7 +65,7 @@ const getData = (callback) => {
       }
     },
     error: function (e) {
-      console.log("Error fetching data:", e);
+      console.error("Error fetching data:", e);
     },
   });
 };
@@ -77,16 +77,29 @@ export default function ChatList() {
   const location = useLocation();
   const [chats, setChats] = useState([...userDataModel.conversations]);
   const [clicked, setClicked] = useState(false);
+  const highlightIdFromNav = location.state?.highlightId;
+  const [highlightId, setHighlightId] = useState(highlightIdFromNav);
   //const [resource_id, setResourceId] = useState(""); // 设置resource_id
 
   useEffect(() => {
     resource_id = getResourceId();
     console.log("resource_id: ", resource_id);
+    //const id = getResourceId();
+    //setResourceId(id);
+    //console.log("resource_id: ", id);
 
     getData((conversations) => {
-      setChats(conversations); // 更新聊天列表
+      setChats(conversations); // 更新聊天列表，这是 user 层面的 conversations
+      console.log("Chat set: ", conversations);
     });
   }, []);
+
+  useEffect(() => {
+    // 页面初始加载后清空 location.state
+    if (highlightIdFromNav) {
+      window.history.replaceState({}, document.title);
+    }
+  }, [highlightIdFromNav]);
 
   const isList = location.pathname === "/";
   const isUser = location.pathname === "/MyProfilePage";
@@ -106,8 +119,10 @@ export default function ChatList() {
       state: {
         objectName: chat.object_name,
         imageUrl: chat.image_url,
+        resource_id: resource_id, // 将resource_id传入chatPage
       },
     });
+    setHighlightId(null); // 清除高亮
     console.log("Chat clicked: ", chat.conversation_id);
     console.log("User avatar clicked: ", chat.user_avatar_url);
   };
@@ -116,39 +131,42 @@ export default function ChatList() {
     <div className="chat-list-container full-height">
       {/* 顶部导航栏 */}
       <nav className="navbar">
-        <h2 className="chat-list-title">Chats</h2>
+        <h2 className="chat-list-title">ObChat</h2>
       </nav>
 
       {/* 聊天列表 */}
       <div className="chat-list">
         {chats.length > 0 ? (
-          chats.map((chat) => (
-            <div
-              key={chat.conversation_id}
-              className="chat-card"
-              onClick={() => handleChatClick(chat)}
-            >
-              <div className="chat-avatar">
-                {chat.avatar_url ? (
-                  <img
-                    src={chat.avatar_url}
-                    alt={chat.object_name}
-                    className="avatar-img"
-                  />
-                ) : (
-                  chat.object_name.charAt(0)
-                )}
-              </div>
-              <div className="chat-info">
-                <div className="chat-title">{chat.object_name}</div>
-                <div className="chat-preview">
-                  {chat.messages && chat.messages.length > 0
-                    ? chat.messages[chat.messages.length - 1].content
-                    : ""}
+          chats.map((chat) => {
+            const isHighlighted = chat.conversation_id === highlightId;
+            return (
+              <div
+                key={chat.conversation_id}
+                className={`chat-card ${isHighlighted ? "highlighted" : ""}`}
+                onClick={() => handleChatClick(chat)}
+              >
+                <div className="chat-avatar">
+                  {chat.avatar_url ? (
+                    <img
+                      src={chat.avatar_url}
+                      alt={chat.object_name}
+                      className="avatar-img"
+                    />
+                  ) : (
+                    chat.object_name.charAt(0)
+                  )}
+                </div>
+                <div className="chat-info">
+                  <div className="chat-title">{chat.object_name}</div>
+                  <div className="chat-preview">
+                    {chat.messages && chat.messages.length > 0
+                      ? chat.messages[chat.messages.length - 1].content
+                      : ""}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div
             style={{

@@ -25,11 +25,6 @@ export default function GeneratingPage() {
   // 处理新对话
   //const handleStartChat = () => {
   const handleNewChat = async () => {
-    if (!objectName) {
-      console.error("Missing objectName for new conversation");
-      return;
-    }
-
     // 获取 localAI photo-to-text 返回文本
     //const photoToText = await getImagetoText(imageUrl);
 
