@@ -99,8 +99,8 @@ export default function AvatarSelectionPage() {
   };
 
   return (
-    <div className="chat-container full-height">
-      <div className="chat-page">
+    <div className="avatar-page-container full-height">
+      <div className="avatar-page">
         <div className="navbar">
           <button
             className="back-btn"
@@ -129,25 +129,27 @@ export default function AvatarSelectionPage() {
             </div>
           )}
         </div>
-        <div className="avatar-grid">
-          {avatarSeeds.map((seed) => {
-            const avatar = createAvatar(adventurer, {
-              seed,
-              size: 60, // 你也可以加 style、scale 等
-            });
-            const svg = avatar.toString(); // 返回的是 SVG 字符串
+        <div className="avatar-grid-area">
+          <div className="avatar-grid">
+            {avatarSeeds.map((seed) => {
+              const avatar = createAvatar(adventurer, {
+                seed,
+                size: 72, // 你也可以加 style、scale 等
+              });
+              const svg = avatar.toString(); // 返回的是 SVG 字符串
 
-            return (
-              <div
-                key={seed}
-                onClick={() => handleAvatarClick(seed)} // 点击头像时触发
-                className={`avatar-item ${
-                  selectedAvatar === seed ? "selected" : ""
-                }`}
-                dangerouslySetInnerHTML={{ __html: svg }}
-              />
-            );
-          })}
+              return (
+                <div
+                  key={seed}
+                  onClick={() => handleAvatarClick(seed)} // 点击头像时触发
+                  className={`avatar-item ${
+                    selectedAvatar === seed ? "selected" : ""
+                  }`}
+                  dangerouslySetInnerHTML={{ __html: svg }}
+                />
+              );
+            })}
+          </div>
         </div>
         <div className="footer">
           <p>Adventurer by Lisa Wischofsky / CC BY 4.0.</p>

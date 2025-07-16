@@ -244,7 +244,7 @@ export default function ObjectEditingPage() {
   };
 
   return (
-    <div>
+    <div className="story-page-container">
       <div className="story-page full-height">
         <div className="nav-bar2">
           <button className="back-btn" onClick={handleBack}>
@@ -299,32 +299,26 @@ export default function ObjectEditingPage() {
             <p
               className="storytext"
               style={{
-                justifySelf: "left",
-                paddingBottom: "2px",
-                paddingTop: "12px",
+                paddingBottom: "4px",
+                paddingTop: "16px",
                 fontWeight: "500",
               }}
             >
               How would you describe it?
             </p>
             <p
-              className="storytext"
+              className="subtext"
               style={{
-                fontSize: "13px",
-                color: "#666",
                 padding: "0px",
-                justifySelf: "left",
               }}
             >
               - Size, color, shape, function
             </p>
             <p
-              className="storytext"
+              className="subtext"
               style={{
-                fontSize: "13px",
-                color: "#666",
                 paddingTop: "0px",
-                justifySelf: "left",
+                paddingBottom: "12px",
               }}
             >
               - Impressions, feelings
@@ -335,40 +329,34 @@ export default function ObjectEditingPage() {
               type="text"
               //placeholder="- Size, color, shape, function..."
               value={objectDescription}
-              style={{ minHeight: "64px" }}
+              style={{ minHeight: "72px" }}
               onChange={(e) => setObjectDescription(e.target.value)}
             />
           </div>
-          <div style={{ width: "252px" }}>
+          <div style={{ width: "284px" }}>
             <p
               className="storytext"
               style={{
-                justifySelf: "left",
-                paddingBottom: "2px",
-                paddingTop: "6px",
+                paddingBottom: "4px",
+                paddingTop: "12px",
                 fontWeight: "500",
               }}
             >
               Lastly, tell me about this object 😊
             </p>
             <p
-              className="storytext"
+              className="subtext"
               style={{
-                fontSize: "13px",
-                color: "#666",
                 padding: "0px",
-                justifySelf: "left",
               }}
             >
               - First memory with it?
             </p>
             <p
-              className="storytext"
+              className="subtext"
               style={{
-                fontSize: "13px",
-                color: "#666",
                 paddingTop: "0px",
-                justifySelf: "left",
+                paddingBottom: "12px",
                 overflowWrap: "break-word",
               }}
             >

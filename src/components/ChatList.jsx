@@ -207,7 +207,7 @@ export default function ChatList() {
         {/* 固定底部的 New Chat 按钮 */}
         <div className="bottom-nav-item" onClick={() => navigate("/")}>
           <AiOutlineUnorderedList
-            size={24}
+            size={28}
             color={isList ? "orange" : "black"}
           />
         </div>
@@ -223,7 +223,7 @@ export default function ChatList() {
           className="bottom-nav-item"
           onClick={() => navigate("/MyProfilePage")}
         >
-          <AiOutlineUser size={24} color={isUser ? "orange" : "black"} />
+          <AiOutlineUser size={28} color={isUser ? "orange" : "black"} />
         </div>
       </div>
     </div>

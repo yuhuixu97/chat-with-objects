@@ -84,30 +84,35 @@ export default function GeneratingPage() {
           Cancel
         </button>*/}
       </div>
-      {imageUrl ? (
-        <div className="photo-page">
-          <div className="photo-display-round" style={{ padding: "8px" }}>
-            <img src={imageUrl} alt="Captured" />
+      <div className="generate-page">
+        {imageUrl ? (
+          <div className="photo-page">
+            <div className="photo-display-round">
+              <img src={imageUrl} alt="Captured" />
+            </div>
           </div>
+        ) : (
+          <p>No photo available.</p>
+        )}
+        <h1
+          className="storytext"
+          style={{ padding: "8px", paddingBottom: "32px" }}
+        >
+          Generating a chat with it ...
+        </h1>
+        <div className="dot-loader">
+          <span className="dot" style={{ animationDelay: "0s" }}></span>
+          <span className="dot" style={{ animationDelay: "0.2s" }}></span>
+          <span className="dot" style={{ animationDelay: "0.4s" }}></span>
+          <span className="dot" style={{ animationDelay: "0.6s" }}></span>
+          <span className="dot" style={{ animationDelay: "0.8s" }}></span>
         </div>
-      ) : (
-        <p>No photo available.</p>
-      )}
-      <h1 className="storytext" style={{ padding: "16px" }}>
-        Generating a chat with the object...
-      </h1>
-      <div className="dot-loader">
-        <span className="dot" style={{ animationDelay: "0s" }}></span>
-        <span className="dot" style={{ animationDelay: "0.2s" }}></span>
-        <span className="dot" style={{ animationDelay: "0.4s" }}></span>
-        <span className="dot" style={{ animationDelay: "0.6s" }}></span>
-        <span className="dot" style={{ animationDelay: "0.8s" }}></span>
+        {/* AI photo-to-text 返回文本容器（result-container-photo-to-text） */}
+        <div
+          id="result-container-photo-to-text"
+          style={{ display: "none" }}
+        ></div>
       </div>
-      {/* AI photo-to-text 返回文本容器（result-container-photo-to-text） */}
-      <div
-        id="result-container-photo-to-text"
-        style={{ display: "none" }}
-      ></div>
     </div>
   );
 }

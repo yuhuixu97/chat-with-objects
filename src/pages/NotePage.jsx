@@ -128,24 +128,27 @@ export default function NotePage() {
           </div>
         </div>
       )}
-      <div className="story-input-area" style={{ paddingTop: "8px" }}>
-        <div>
-          {/* 
+      <div className="note-page">
+        <div className="story-input-area" style={{ paddingTop: "8px" }}>
+          <div>
+            {/* 
           <p
             className="storytext"
             style={{ fontWeight: "500", marginBottom: "8px" }}
           >
             Anything in your mind?
           </p>*/}
-          {/* 文本框部分 */}
-          <textarea
-            className="descriptives-input"
-            type="text"
-            /*placeholder="Thought, feeling, reflection, feedback..."*/
-            placeholder="Anything in your mind?"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
+            {/* 文本框部分 */}
+            <textarea
+              className="descriptives-input"
+              type="text"
+              /*placeholder="Thought, feeling, reflection, feedback..."*/
+              placeholder="Anything in your mind?"
+              value={note}
+              style={{ fontSize: "18px" }}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </div>
         </div>
       </div>
     </div>

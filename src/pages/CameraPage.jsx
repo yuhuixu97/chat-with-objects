@@ -103,7 +103,7 @@ export default function CameraPage() {
           />
         </button>
         <header className="chat-header" style={{ color: "#ffffff" }}>
-          Take photo of the object
+          Take photo
         </header>
       </div>
       <div className="video-container">

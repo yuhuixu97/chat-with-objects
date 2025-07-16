@@ -104,7 +104,7 @@ export default function MyProfilePage() {
           }
         >
           <AiFillEdit style={{ marginRight: "8px" }} />
-          Send note
+          Write note
         </button>
         <button
           className="my-profile-btn-logout"
@@ -133,7 +133,7 @@ export default function MyProfilePage() {
         {/* 固定底部的 New Chat 按钮 */}
         <div className="bottom-nav-item" onClick={() => navigate("/")}>
           <AiOutlineUnorderedList
-            size={24}
+            size={28}
             color={isList ? "orange" : "black"}
           />
         </div>
@@ -149,7 +149,7 @@ export default function MyProfilePage() {
           className="bottom-nav-item"
           onClick={() => navigate("/MyProfilePage")}
         >
-          <AiOutlineUser size={24} color={isUser ? "orange" : "black"} />
+          <AiOutlineUser size={28} color={isUser ? "orange" : "black"} />
         </div>
       </div>
     </div>

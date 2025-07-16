@@ -47,7 +47,7 @@ export default function PhotoPage() {
         <p>No photo available.</p>
       )}
       <div>
-        <p>{currentPrompt}</p>
+        <p style={{ width: "calc(100vw - 32px)" }}>{currentPrompt}</p>
       </div>
     </div>
   );

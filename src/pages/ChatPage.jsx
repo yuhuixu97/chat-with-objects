@@ -60,6 +60,7 @@ export default function ChatPage() {
   const lastMessageRef = useRef(null);
 
   const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
   // 所有的 chat history
   const [chatHistory, setchatHistory] = useState("");
@@ -116,6 +117,27 @@ export default function ChatPage() {
   useEffect(() => {
     console.log("userFacts updated:", userFacts);
   }, [userFacts]);
+
+  // chat input 的自动变化
+  const initialHeight = 22; // 初始 input 高度（你想设多少都行）
+  const handleInputChange = (e) => {
+    const textarea = textareaRef.current;
+    const value = e.target.value;
+    setInput(value);
+    // 每次输入前重置 scrollTop
+    textarea.scrollTop = 0;
+    // 判断是否为空
+    if (value.trim().length === 0) {
+      textarea.style.height = `${initialHeight}px`;
+      textarea.style.overflowY = "hidden"; // 确保没有滚动条
+    } else {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+      // 只在需要时启用滚动条（可选）
+      textarea.style.overflowY =
+        textarea.scrollHeight > textarea.clientHeight ? "auto" : "hidden";
+    }
+  };
 
   const getData = (conversationId) => {
     $.ajax({
@@ -270,6 +292,9 @@ export default function ChatPage() {
       // 调用发送消息的函数
       sendMessage(conversation_id, newMessage);
       setInput(""); // 清空输入框
+
+      const textarea = document.querySelector(".chat-input textarea");
+      if (textarea) textarea.style.height = "auto";
 
       // 生成 AI 响应
       // 总的 prompt to AI
@@ -723,18 +748,20 @@ export default function ChatPage() {
           )}
         </div>
         <div className="chat-input">
-          <input
+          <textarea
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            ref={textareaRef}
+            onChange={handleInputChange}
             placeholder="Type a message..."
+            rows={1}
           />
           <button
             onClick={sendMessageHandler}
             disabled={!input.trim()}
             className={`send-button ${input.trim() ? "active" : "disabled"}`}
           >
-            <AiOutlineSend size={18} style={{ marginLeft: "2px" }} />
+            <AiOutlineSend size={20} style={{ marginLeft: "2px" }} />
           </button>
         </div>
       </div>

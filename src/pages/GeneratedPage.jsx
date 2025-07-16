@@ -45,32 +45,34 @@ export default function GeneratedPage() {
   };
 
   return (
-    <div className="story-page full-height" style={{ alignItems: "center" }}>
+    <div className="story-page full-height">
       <div className="nav-bar2"></div>
-      {imageUrl ? (
-        <div className="photo-page">
-          <div className="photo-display-round" style={{ padding: "8px" }}>
-            <img src={imageUrl} alt="Captured" />
+      <div className="generate-page">
+        {imageUrl ? (
+          <div className="photo-page">
+            <div className="photo-display-round">
+              <img src={imageUrl} alt="Captured" />
+            </div>
           </div>
-        </div>
-      ) : (
-        <p>No photo available.</p>
-      )}
-      <h1 className="storytext" style={{ paddingTop: "8px" }}>
-        Generation completed.
-      </h1>
-      <h1
-        className="storytext"
-        style={{ fontSize: "20px", paddingBottom: "16px" }}
-      >
-        You can now chat with it!
-      </h1>
+        ) : (
+          <p>No photo available.</p>
+        )}
+        <h1 className="storytext" style={{ paddingTop: "8px" }}>
+          Completed!
+        </h1>
+        <h1
+          className="storytext"
+          style={{ fontSize: "20px", paddingBottom: "16px" }}
+        >
+          You can now chat with it!
+        </h1>
 
-      {/* Start the chat 按钮，点击跳转chatpage */}
-      <div style={{ padding: "16px" }}>
-        <button className="start-chat-btn" onClick={handleStartChat}>
-          Back to list
-        </button>
+        {/* Start the chat 按钮，点击跳转chatpage */}
+        <div style={{ padding: "16px" }}>
+          <button className="start-chat-btn" onClick={handleStartChat}>
+            Back to list
+          </button>
+        </div>
       </div>
     </div>
   );
