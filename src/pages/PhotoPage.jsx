@@ -6,26 +6,38 @@ import { GoChevronLeft } from "react-icons/go";
 export default function PhotoPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { imageUrl, currentPrompt } = location.state || {}; // 从 `location.state` 获取传递的图片 URL
+  const { imageUrl, currentPrompt, pmtOption } = location.state || {}; // 从 `location.state` 获取传递的图片 URL
+
+  console.log("pmtOption in PhotoPage: ", pmtOption);
 
   return (
-    <div className="camera-page full-height">
-      <div className="nav-bar2" style={{ backgroundColor: "#1a1a1a" }}>
-        <button className="back-btn" onClick={() => navigate("/CameraPage")}>
-          <GoChevronLeft size={24} style={{ color: "#ffffff" }} />
+    <div
+      className="camera-page full-height"
+      style={{ backgroundColor: "#f5f5f5" }}
+    >
+      <div className="nav-bar2" style={{ backgroundColor: "#f5f5f5" }}>
+        <button
+          className="back-btn"
+          onClick={() =>
+            navigate("/CameraPage", { state: { currentPrompt, pmtOption } })
+          }
+        >
+          <GoChevronLeft size={24} />
         </button>
         <button
           className="done-btn"
           onClick={() =>
-            navigate("/StoryInputPage", { state: { imageUrl, currentPrompt } })
+            navigate("/StoryInputPage", {
+              state: { imageUrl, currentPrompt, pmtOption },
+            })
           }
-          style={{ color: "#ffffff" }}
+          style={{ paddingRight: "0" }}
         >
           Done
         </button>
       </div>
 
-      <h2 style={{ color: "#ffffff" }}>Your Photo</h2>
+      <h3>Photo of the object</h3>
 
       {imageUrl ? (
         <div className="photo-display">
@@ -34,6 +46,9 @@ export default function PhotoPage() {
       ) : (
         <p>No photo available.</p>
       )}
+      <div>
+        <p>{currentPrompt}</p>
+      </div>
     </div>
   );
 }

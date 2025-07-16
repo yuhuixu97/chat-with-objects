@@ -30,7 +30,7 @@ export default function PromptingPage() {
   const navigate = useNavigate();
 
   const location = useLocation();
-  const { prompt } = location.state || {}; // 获取传递的 prompt
+  const { prompt, pmtOption } = location.state; // 获取传递的 prompt
   const [currentPrompt, setPrompt] = useState(prompt || "Makes you happy");
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -164,7 +164,9 @@ export default function PromptingPage() {
             <button
               className="prompting-camera-btn"
               onClick={() =>
-                navigate("/CameraPage", { state: { currentPrompt } })
+                navigate("/CameraPage", {
+                  state: { currentPrompt, pmtOption: "yesPrompt" },
+                })
               }
             >
               <AiOutlineCamera size={34} color="#ffffff" />

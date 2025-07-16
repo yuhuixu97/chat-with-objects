@@ -80,9 +80,9 @@ export default function GeneratingPage() {
   return (
     <div className="story-page full-height">
       <div className="nav-bar2">
-        <button className="back-btn" onClick={() => navigate("/")}>
+        {/*<button className="back-btn" onClick={() => navigate("/")}>
           Cancel
-        </button>
+        </button>*/}
       </div>
       {imageUrl ? (
         <div className="photo-page">

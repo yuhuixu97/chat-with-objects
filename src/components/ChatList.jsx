@@ -80,6 +80,7 @@ export default function ChatList() {
   const highlightIdFromNav = location.state?.highlightId;
   const [highlightId, setHighlightId] = useState(highlightIdFromNav);
   //const [resource_id, setResourceId] = useState(""); // 设置resource_id
+  const chatsEndRef = useRef(null);
 
   useEffect(() => {
     resource_id = getResourceId();
@@ -93,6 +94,12 @@ export default function ChatList() {
       console.log("Chat set: ", conversations);
     });
   }, []);
+
+  useEffect(() => {
+    if (highlightId != null) {
+      chatsEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  }, [highlightId]);
 
   useEffect(() => {
     // 页面初始加载后清空 location.state
@@ -133,7 +140,6 @@ export default function ChatList() {
       <nav className="navbar">
         <h2 className="chat-list-title">ObChat</h2>
       </nav>
-
       {/* 聊天列表 */}
       <div className="chat-list">
         {chats.length > 0 ? (
@@ -194,6 +200,8 @@ export default function ChatList() {
             </p>
           </div>
         )}
+        <div ref={chatsEndRef} style={{ paddingBottom: "80px" }} />
+        {/* 滚动锚点 */}
       </div>
       <div className="bottom-navbar">
         {/* 固定底部的 New Chat 按钮 */}

@@ -51,6 +51,7 @@ export default function ObjectEditingPage() {
   const [objectDescription, setObjectDescription] = useState(""); // 存储物品描述
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [userChat, setUserChats] = useState([...userDataModel.conversations]); // 存储 user 下的 conversations
+  const [currentPrompt, setCurrentPrompt] = useState("");
 
   useEffect(() => {
     resource_id = getResourceId();
@@ -96,6 +97,7 @@ export default function ObjectEditingPage() {
           setObjectPhoto(chat.avatar_url); // 获取并设置 imageUrl
           setObjectDescription(chat.object_descriptions); // 获取并设置 descriptions
           setObjectStory(chat.user_input_story); // 获取并设置 object story
+          setCurrentPrompt(chat.chosen_prompt);
           console.log("Object info retrieved.");
         } else {
           console.warn(`Conversation ${conversation_id} not found.1`);
@@ -242,65 +244,152 @@ export default function ObjectEditingPage() {
   };
 
   return (
-    <div className="story-page full-height">
-      <div className="nav-bar2">
-        <button className="back-btn" onClick={handleBack}>
-          <GoChevronLeft size={24} />
-        </button>
-        <button className="done-btn" onClick={handleUpdate}>
-          Update
-        </button>
-      </div>
-      <div className="story-input-area">
-        {objectPhoto ? (
-          <div className="captured-photo-area">
-            <div className="photo-display-round">
-              <img src={objectPhoto} alt="Captured" />
-            </div>
-          </div>
-        ) : (
-          <p>No photo available.</p>
-        )}
-        {/* 弹窗 */}
-        {showConfirmation && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <h3>Object info updated!</h3>
-              <p style={{ fontSize: "14px" }}>Returning to the chat...</p>
-            </div>
-          </div>
-        )}
-        <div>
-          <p className="storytext">What do you want to call it?</p>
-          {/* 文本框部分 */}
-          <input
-            className="name-input"
-            type="text"
-            placeholder="Its name is..."
-            rows="1"
-            cols="32"
-            value={objectName}
-            onChange={(e) => setObjectName(e.target.value)}
-          />
+    <div>
+      <div className="story-page full-height">
+        <div className="nav-bar2">
+          <button className="back-btn" onClick={handleBack}>
+            <GoChevronLeft size={24} />
+          </button>
+          <button
+            className="done-btn"
+            onClick={handleUpdate}
+            style={{ paddingRight: "0" }}
+          >
+            Update
+          </button>
         </div>
-        <p className="storytext">How would you describe it?</p>
-        {/* 文本框部分 */}
-        <textarea
-          className="descriptives-input"
-          type="text"
-          placeholder="Size, color, shape, function..."
-          value={objectDescription}
-          onChange={(e) => setObjectDescription(e.target.value)}
-        />
-        <p className="storytext">Lastly, tell me about this object 😊</p>
-        {/* 文本框部分 */}
-        <textarea
-          className="story-input"
-          type="text"
-          placeholder="What's the story behind it?"
-          value={objectStory}
-          onChange={(e) => setObjectStory(e.target.value)}
-        />
+        <div className="story-input-area" style={{ paddingTop: "0" }}>
+          {objectPhoto ? (
+            <div className="captured-photo-area">
+              <div className="photo-display-round">
+                <img src={objectPhoto} alt="Captured" />
+              </div>
+            </div>
+          ) : (
+            <p>No photo available.</p>
+          )}
+          {/* 弹窗 */}
+          {showConfirmation && (
+            <div className="modal-overlay">
+              <div className="modal">
+                <h3>Object info updated!</h3>
+                <p style={{ fontSize: "14px" }}>Returning to the chat...</p>
+              </div>
+            </div>
+          )}
+          <div>
+            <p
+              className="storytext"
+              style={{ justifySelf: "left", fontWeight: "500" }}
+            >
+              What do you want to call it?
+            </p>
+            {/* 文本框部分 */}
+            <input
+              className="name-input"
+              type="text"
+              placeholder="Its name is..."
+              rows="1"
+              cols="32"
+              value={objectName}
+              onChange={(e) => setObjectName(e.target.value)}
+            />
+          </div>
+          <div>
+            <p
+              className="storytext"
+              style={{
+                justifySelf: "left",
+                paddingBottom: "2px",
+                paddingTop: "12px",
+                fontWeight: "500",
+              }}
+            >
+              How would you describe it?
+            </p>
+            <p
+              className="storytext"
+              style={{
+                fontSize: "13px",
+                color: "#666",
+                padding: "0px",
+                justifySelf: "left",
+              }}
+            >
+              - Size, color, shape, function
+            </p>
+            <p
+              className="storytext"
+              style={{
+                fontSize: "13px",
+                color: "#666",
+                paddingTop: "0px",
+                justifySelf: "left",
+              }}
+            >
+              - Impressions, feelings
+            </p>
+            {/* 文本框部分 */}
+            <textarea
+              className="descriptives-input"
+              type="text"
+              //placeholder="- Size, color, shape, function..."
+              value={objectDescription}
+              style={{ minHeight: "64px" }}
+              onChange={(e) => setObjectDescription(e.target.value)}
+            />
+          </div>
+          <div style={{ width: "252px" }}>
+            <p
+              className="storytext"
+              style={{
+                justifySelf: "left",
+                paddingBottom: "2px",
+                paddingTop: "6px",
+                fontWeight: "500",
+              }}
+            >
+              Lastly, tell me about this object 😊
+            </p>
+            <p
+              className="storytext"
+              style={{
+                fontSize: "13px",
+                color: "#666",
+                padding: "0px",
+                justifySelf: "left",
+              }}
+            >
+              - First memory with it?
+            </p>
+            <p
+              className="storytext"
+              style={{
+                fontSize: "13px",
+                color: "#666",
+                paddingTop: "0px",
+                justifySelf: "left",
+                overflowWrap: "break-word",
+              }}
+            >
+              {currentPrompt
+                ? `- Why "${currentPrompt}"?`
+                : "- What is your story with the object?"}
+            </p>
+            {/* 文本框部分 */}
+            <textarea
+              className="story-input"
+              type="text"
+              /*placeholder={
+              currentPrompt
+                ? `- Your first memory with it?\n- Why "${currentPrompt}"?`
+                : "What is your story with the object?"
+            } // Why does the object "makes you feel happy"?*/
+              value={objectStory}
+              onChange={(e) => setObjectStory(e.target.value)}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

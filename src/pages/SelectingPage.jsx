@@ -24,7 +24,9 @@ export default function SelectingPage() {
             className="selection-btn"
             onClick={() => {
               setTimeout(() => {
-                navigate("/PromptingPage", { state: { prompt: "" } }); // 传递一个空字符串
+                navigate("/PromptingPage", {
+                  state: { prompt: "", pmtOption: "yesPrompt" },
+                }); // 传递一个空字符串
               }, 250); // 延迟 300 毫秒跳转
             }}
           >
@@ -35,7 +37,7 @@ export default function SelectingPage() {
             className="selection-btn-2"
             onClick={() => {
               setTimeout(() => {
-                navigate("/CameraPage");
+                navigate("/CameraPage", { state: { pmtOption: "noPrompt" } });
               }, 250); // 延迟 300 毫秒跳转
             }}
           >

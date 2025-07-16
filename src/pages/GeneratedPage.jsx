@@ -45,7 +45,7 @@ export default function GeneratedPage() {
   };
 
   return (
-    <div className="story-page full-height">
+    <div className="story-page full-height" style={{ alignItems: "center" }}>
       <div className="nav-bar2"></div>
       {imageUrl ? (
         <div className="photo-page">
@@ -56,7 +56,7 @@ export default function GeneratedPage() {
       ) : (
         <p>No photo available.</p>
       )}
-      <h1 className="storytext" style={{ paddingTop: "16px" }}>
+      <h1 className="storytext" style={{ paddingTop: "8px" }}>
         Generation completed.
       </h1>
       <h1

@@ -107,9 +107,13 @@ export default function NotePage() {
         <button className="back-btn" onClick={() => navigate("/MyProfilePage")}>
           <GoChevronLeft size={24} />
         </button>
+        <header className="chat-header" style={{ fontWeight: "bold" }}>
+          Note
+        </header>
         <button
           className={`done-btn ${note ? "" : "disabled"}`}
           onClick={handleSend}
+          style={{ paddingRight: "0px" }}
           disabled={!note}
         >
           Send
@@ -124,20 +128,21 @@ export default function NotePage() {
           </div>
         </div>
       )}
-      <div className="story-input-area">
+      <div className="story-input-area" style={{ paddingTop: "8px" }}>
         <div>
+          {/* 
           <p
             className="storytext"
             style={{ fontWeight: "500", marginBottom: "8px" }}
           >
             Anything in your mind?
-          </p>
+          </p>*/}
           {/* 文本框部分 */}
           <textarea
             className="descriptives-input"
             type="text"
             /*placeholder="Thought, feeling, reflection, feedback..."*/
-            placeholder="I feel like ..."
+            placeholder="Anything in your mind?"
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />

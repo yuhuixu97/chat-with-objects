@@ -16,7 +16,7 @@ export default function CameraPage() {
   const [cameraActive, setCameraActive] = useState(false); // 判断摄像头是否激活
   const [facingMode, setFacingMode] = useState("environment"); // 👈 默认后置摄像头
   const location = useLocation();
-  const { currentPrompt } = location.state || {}; // 获取传递的 prompt
+  const { currentPrompt, pmtOption } = location.state || {}; // 获取传递的 prompt
 
   // 切换摄像头
   const toggleCamera = () => {
@@ -49,7 +49,7 @@ export default function CameraPage() {
         }
       }
     };
-
+    console.log("pmtOption: ", pmtOption);
     startVideo();
 
     // 清理摄像头流
@@ -77,15 +77,30 @@ export default function CameraPage() {
       if (stream) {
         stream.getTracks().forEach((track) => track.stop()); // 停止摄像头流
       }
-      navigate("/PhotoPage", { state: { imageUrl, currentPrompt } }); // 跳转到 "/PhotoPage" 页面，并传递图片 URL
+      navigate("/PhotoPage", { state: { imageUrl, currentPrompt, pmtOption } }); // 跳转到 "/PhotoPage" 页面，并传递图片 URL
     }
   };
 
   return (
     <div className="camera-page full-height">
       <div className="nav-bar2" style={{ backgroundColor: "#1a1a1a" }}>
-        <button className="back-btn" onClick={() => navigate("/SelectingPage")}>
-          <GoChevronLeft size={24} style={{ color: "#ffffff" }} />
+        <button
+          className="back-btn"
+          onClick={() => {
+            let targetPage = "/SelectingPage"; // 默认值
+            console.log("pmtOption: ", pmtOption);
+            if (pmtOption === "yesPrompt") {
+              targetPage = "/PromptingPage";
+            } else if (pmtOption === "noPrompt") {
+              targetPage = "/SelectingPage";
+            }
+            navigate(targetPage, { state: { currentPrompt, pmtOption } });
+          }}
+        >
+          <GoChevronLeft
+            size={24}
+            style={{ paddingLeft: "8px", color: "#ffffff" }}
+          />
         </button>
         <header className="chat-header" style={{ color: "#ffffff" }}>
           Take photo of the object
@@ -93,6 +108,11 @@ export default function CameraPage() {
       </div>
       <div className="video-container">
         <video ref={videoRef} autoPlay playsInline></video>
+      </div>
+      <div>
+        <p style={{ color: "#eee", paddingLeft: "12px", paddingRight: "12px" }}>
+          {currentPrompt}
+        </p>
       </div>
       <div className="camera-bottom-bar">
         <div className="camera-bottom-bar-item"></div>
