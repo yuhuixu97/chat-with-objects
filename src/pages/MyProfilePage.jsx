@@ -6,7 +6,7 @@ import {
   addConversation,
   initializeUser,
 } from "../userDataModel";
-import { getResourceId } from "../resource"; // 导入设置方法
+import { getResourceId, clearResourceId } from "../resource"; // 导入设置方法
 
 import { GoPlus } from "react-icons/go";
 import { AiOutlineUnorderedList } from "react-icons/ai";
@@ -28,6 +28,10 @@ export default function MyProfilePage() {
   useEffect(() => {
     resource_id = getResourceId(); // 页面加载时获取 resource_id
     console.log("Resource_id set: ", resource_id);
+    if (!resource_id) {
+      navigate("/LoginPage");
+      return;
+    }
     // 页面加载时执行
     getUserData();
   }, []); // 空依赖数组表示只在组件首次挂载时运行一次
@@ -71,6 +75,7 @@ export default function MyProfilePage() {
 
   const handleLogout = () => {
     // 这里写退出逻辑，比如清除 token 或跳转登录页
+    clearResourceId();
     navigate("/LoginPage");
     console.log("User logged out");
   };
@@ -79,7 +84,7 @@ export default function MyProfilePage() {
     <div className="chat-list-container full-height">
       {/* 顶部导航栏 */}
       <nav className="navbar">
-        <h2 className="chat-list-title">My profile</h2>
+        <h2 className="my-profile-title">My profile</h2>
       </nav>
 
       {/* 聊天列表 */}
@@ -102,13 +107,15 @@ export default function MyProfilePage() {
           onClick={() =>
             navigate("/NotePage", { state: { resource_id: resource_id } })
           }
+          style={{ fontSize: "18px" }}
         >
-          <AiFillEdit style={{ marginRight: "8px" }} />
+          <AiFillEdit size={22} style={{ marginRight: "8px" }} />
           Write note
         </button>
         <button
           className="my-profile-btn-logout"
           onClick={() => setShowConfirm(true)}
+          style={{ fontSize: "18px" }}
         >
           Log out
         </button>
@@ -123,7 +130,17 @@ export default function MyProfilePage() {
             </p>
             <div className="modal-buttons">
               <button onClick={handleLogout}>Log out</button>
-              <button onClick={() => setShowConfirm(false)}>Cancel</button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                style={{
+                  color: "#222",
+                  WebkitAppearance: "none",
+                  appearance: "none",
+                  textDecoration: "none",
+                }}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -133,8 +150,8 @@ export default function MyProfilePage() {
         {/* 固定底部的 New Chat 按钮 */}
         <div className="bottom-nav-item" onClick={() => navigate("/")}>
           <AiOutlineUnorderedList
-            size={28}
-            color={isList ? "orange" : "black"}
+            size={32}
+            color={isList ? "#fe9071" : "#222"}
           />
         </div>
         <div className="bottom-nav-item">
@@ -142,14 +159,14 @@ export default function MyProfilePage() {
             className={`add-chat-btn ${clicked ? "clicked" : ""}`}
             onClick={handleButtonClick}
           >
-            <GoPlus size={32} />
+            <GoPlus size={36} />
           </button>
         </div>
         <div
           className="bottom-nav-item"
           onClick={() => navigate("/MyProfilePage")}
         >
-          <AiOutlineUser size={28} color={isUser ? "orange" : "black"} />
+          <AiOutlineUser size={32} color={isUser ? "#fe9071" : "#222"} />
         </div>
       </div>
     </div>

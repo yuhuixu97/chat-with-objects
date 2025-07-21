@@ -38,7 +38,7 @@ export function generatePrompt(
   objectName,
   objectChosenPrompt,
   updatedUserFacts,
-  updatedObjectFacts
+  objectEnvironment
 ) {
   const prompt = `
     ${systemPrompt}
@@ -47,6 +47,7 @@ export function generatePrompt(
     Object's name: ${objectName}
     Object's description: ${objectDescription}
     Object's story with the user: ${objectStory}
+    Object's environment: ${objectEnvironment}
     Why user picked this object: It is the object that ${objectChosenPrompt} ("You" here refers to the user).
     
     [User facts]:

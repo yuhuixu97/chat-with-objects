@@ -12,12 +12,17 @@ export default function GeneratingPage() {
     objectDescription,
     objectStory,
     currentPrompt,
+    objectEnvironment,
   } = location.state || {}; // 获取物品名称和图片
 
   useEffect(() => {
     const timer = setTimeout(() => {
       handleNewChat(); // 替换成你想跳转的路径
     }, 4000); // 4000ms = 4秒
+    console.log(
+      "objectEnvironment passed to GeneratingPage from StoryInputPage: ",
+      objectEnvironment
+    );
 
     return () => clearTimeout(timer); // 清理定时器
   }, [navigate]);
@@ -34,7 +39,8 @@ export default function GeneratingPage() {
         imageUrl,
         objectDescription,
         objectStory,
-        currentPrompt
+        currentPrompt,
+        objectEnvironment
         //photoToText
       ); // ✅ 确保 `await` 结果
 
@@ -43,12 +49,13 @@ export default function GeneratingPage() {
         navigate("/GeneratedPage", {
           state: {
             imageUrl,
-            objectName,
-            objectDescription,
-            objectStory,
+            //objectName,
+            //objectDescription,
+            //objectStory,
             //photoToText,
-            currentPrompt,
+            //currentPrompt,
             newChat,
+            //objectEnvironment,
           },
         });
       } else {
@@ -86,8 +93,18 @@ export default function GeneratingPage() {
       </div>
       <div className="generate-page">
         {imageUrl ? (
-          <div className="photo-page">
-            <div className="photo-display-round">
+          <div
+            className="photo-page"
+            style={{ paddingTop: "24px", paddingBottom: "24px" }}
+          >
+            <div
+              className="photo-display-round"
+              style={{
+                boxShadow: "0 0 0 8px #fff",
+                width: "180px",
+                height: "180px",
+              }}
+            >
               <img src={imageUrl} alt="Captured" />
             </div>
           </div>

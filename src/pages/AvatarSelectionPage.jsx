@@ -124,7 +124,7 @@ export default function AvatarSelectionPage() {
                   alt="Selected Avatar"
                   className="modal-avatar"
                 />
-                <p style={{ fontSize: "14px" }}>Jumping to the next page...</p>
+                <p style={{ fontSize: "16px" }}>Returning to your profile...</p>
               </div>
             </div>
           )}

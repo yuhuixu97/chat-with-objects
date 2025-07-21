@@ -103,17 +103,26 @@ export default function CameraPage() {
           />
         </button>
         <header className="chat-header" style={{ color: "#ffffff" }}>
-          Take photo
+          Take object photo
         </header>
+      </div>
+      <div>
+        <p
+          style={{
+            color: "#eee",
+            paddingLeft: "20px",
+            paddingRight: "20px",
+            marginTop: "8px",
+            fontSize: "17px",
+          }}
+        >
+          {currentPrompt}
+        </p>
       </div>
       <div className="video-container">
         <video ref={videoRef} autoPlay playsInline></video>
       </div>
-      <div>
-        <p style={{ color: "#eee", paddingLeft: "12px", paddingRight: "12px" }}>
-          {currentPrompt}
-        </p>
-      </div>
+
       <div className="camera-bottom-bar">
         <div className="camera-bottom-bar-item"></div>
         <div className="camera-bottom-bar-item">

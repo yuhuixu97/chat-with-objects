@@ -53,6 +53,20 @@ export default function ObjectEditingPage() {
   const [userChat, setUserChats] = useState([...userDataModel.conversations]); // 存储 user 下的 conversations
   const [currentPrompt, setCurrentPrompt] = useState("");
 
+  const textareaRef = useRef(null);
+  // 弹出键盘时聚焦到textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    const handleFocus = () => {
+      setTimeout(() => {
+        textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    };
+    textarea.addEventListener("focus", handleFocus);
+    return () => textarea.removeEventListener("focus", handleFocus);
+  }, []);
+
   useEffect(() => {
     resource_id = getResourceId();
     console.log("resource_id: ", resource_id);
@@ -261,7 +275,10 @@ export default function ObjectEditingPage() {
         <div className="story-input-area" style={{ paddingTop: "0" }}>
           {objectPhoto ? (
             <div className="captured-photo-area">
-              <div className="photo-display-round">
+              <div
+                className="photo-display-round"
+                style={{ boxShadow: "0 0 0 8px #fff" }}
+              >
                 <img src={objectPhoto} alt="Captured" />
               </div>
             </div>
@@ -273,7 +290,7 @@ export default function ObjectEditingPage() {
             <div className="modal-overlay">
               <div className="modal">
                 <h3>Object info updated!</h3>
-                <p style={{ fontSize: "14px" }}>Returning to the chat...</p>
+                <p style={{ fontSize: "16px" }}>Returning to the chat...</p>
               </div>
             </div>
           )}
@@ -287,6 +304,7 @@ export default function ObjectEditingPage() {
             {/* 文本框部分 */}
             <input
               className="name-input"
+              ref={textareaRef}
               type="text"
               placeholder="Its name is..."
               rows="1"
@@ -325,15 +343,15 @@ export default function ObjectEditingPage() {
             </p>
             {/* 文本框部分 */}
             <textarea
+              ref={textareaRef}
               className="descriptives-input"
               type="text"
               //placeholder="- Size, color, shape, function..."
               value={objectDescription}
-              style={{ minHeight: "72px" }}
               onChange={(e) => setObjectDescription(e.target.value)}
             />
           </div>
-          <div style={{ width: "284px" }}>
+          <div style={{ width: "292px", marginBottom: "32px" }}>
             <p
               className="storytext"
               style={{
@@ -342,7 +360,7 @@ export default function ObjectEditingPage() {
                 fontWeight: "500",
               }}
             >
-              Lastly, tell me about this object 😊
+              Tell me about this object 😊
             </p>
             <p
               className="subtext"
@@ -366,6 +384,7 @@ export default function ObjectEditingPage() {
             </p>
             {/* 文本框部分 */}
             <textarea
+              ref={textareaRef}
               className="story-input"
               type="text"
               /*placeholder={

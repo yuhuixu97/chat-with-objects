@@ -1,14 +1,35 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GoChevronLeft } from "react-icons/go";
 
 export default function StoryInputPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { imageUrl, currentPrompt, pmtOption } = location.state || {}; // 从 `location.state` 获取传递的图片 URL
+  const { imageUrl, currentPrompt, pmtOption, objectEnvironment } =
+    location.state || {}; // 从 `location.state` 获取传递的图片 URL
   const [objectName, setObjectName] = useState(""); // 存储用户输入的 objectName
   const [objectStory, setObjectStory] = useState(""); // 存储物品描述
   const [objectDescription, setObjectDescription] = useState(""); // 存储物品描述
+
+  const textareaRef = useRef(null);
+
+  console.log(
+    "objectEnvironment passed to StoryInputPage from PhotoPage: ",
+    objectEnvironment
+  );
+
+  // 弹出键盘时聚焦到textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    const handleFocus = () => {
+      setTimeout(() => {
+        textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    };
+    textarea.addEventListener("focus", handleFocus);
+    return () => textarea.removeEventListener("focus", handleFocus);
+  }, []);
 
   const handleDone = () => {
     if (!objectName.trim()) {
@@ -23,6 +44,7 @@ export default function StoryInputPage() {
         objectDescription,
         objectStory,
         currentPrompt,
+        objectEnvironment,
       },
     });
   };
@@ -53,7 +75,10 @@ export default function StoryInputPage() {
         <div className="story-input-area" style={{ paddingTop: "0" }}>
           {imageUrl ? (
             <div className="captured-photo-area">
-              <div className="photo-display-round">
+              <div
+                className="photo-display-round"
+                style={{ boxShadow: "0 0 0 8px #fff" }}
+              >
                 <img src={imageUrl} alt="Captured" />
               </div>
             </div>
@@ -70,6 +95,7 @@ export default function StoryInputPage() {
             </p>
             {/* 文本框部分 */}
             <input
+              ref={textareaRef}
               className="name-input"
               type="text"
               placeholder="Its name is..."
@@ -109,15 +135,15 @@ export default function StoryInputPage() {
             </p>
             {/* 文本框部分 */}
             <textarea
+              ref={textareaRef}
               className="descriptives-input"
               type="text"
               //placeholder="- Size, color, shape, function..."
               value={objectDescription}
-              style={{ minHeight: "72px" }}
               onChange={(e) => setObjectDescription(e.target.value)}
             />
           </div>
-          <div style={{ width: "284px" }}>
+          <div style={{ width: "292px", marginBottom: "32px" }}>
             <p
               className="storytext"
               style={{
@@ -126,7 +152,7 @@ export default function StoryInputPage() {
                 fontWeight: "500",
               }}
             >
-              Lastly, tell me about this object 😊
+              Tell me about this object 😊
             </p>
             <p
               className="subtext"
@@ -151,6 +177,7 @@ export default function StoryInputPage() {
             {/* 文本框部分 */}
             <textarea
               className="story-input"
+              ref={textareaRef}
               type="text"
               /*placeholder={
               currentPrompt

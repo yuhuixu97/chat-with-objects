@@ -66,6 +66,7 @@ const getData = (callback) => {
     },
     error: function (e) {
       console.error("Error fetching data:", e);
+      console.error("resource_id: ", resource_id);
     },
   });
 };
@@ -83,8 +84,13 @@ export default function ChatList() {
   const chatsEndRef = useRef(null);
 
   useEffect(() => {
-    resource_id = getResourceId();
+    resource_id = getResourceId(); // 进来先get resource id，默认是开发者账户 P001，所以会有问题。
     console.log("resource_id: ", resource_id);
+    if (!resource_id) {
+      navigate("/LoginPage");
+      console.log("returning to login page");
+      return;
+    }
     //const id = getResourceId();
     //setResourceId(id);
     //console.log("resource_id: ", id);
@@ -138,7 +144,7 @@ export default function ChatList() {
     <div className="chat-list-container full-height">
       {/* 顶部导航栏 */}
       <nav className="navbar">
-        <h2 className="chat-list-title">ObChat</h2>
+        <h2 className="chat-list-title">ObChat!</h2>
       </nav>
       {/* 聊天列表 */}
       <div className="chat-list">
@@ -183,12 +189,12 @@ export default function ChatList() {
             }}
           >
             <AiOutlineComment size={72} style={{ opacity: 0.2 }} />
-            <p style={{ opacity: 0.35, textAlign: "center" }}>
+            <p style={{ opacity: 0.35, textAlign: "center", fontSize: "16px" }}>
               No chat with object yet.
             </p>
             <p
               style={{
-                fontSize: "14px",
+                fontSize: "16px",
                 opacity: 0.35,
                 textAlign: "center",
                 paddingTop: "144px",
@@ -207,8 +213,8 @@ export default function ChatList() {
         {/* 固定底部的 New Chat 按钮 */}
         <div className="bottom-nav-item" onClick={() => navigate("/")}>
           <AiOutlineUnorderedList
-            size={28}
-            color={isList ? "orange" : "black"}
+            size={32}
+            color={isList ? "#fe9071" : "#222"}
           />
         </div>
         <div className="bottom-nav-item">
@@ -216,14 +222,14 @@ export default function ChatList() {
             className={`add-chat-btn ${clicked ? "clicked" : ""}`}
             onClick={handleButtonClick}
           >
-            <GoPlus size={32} />
+            <GoPlus size={36} />
           </button>
         </div>
         <div
           className="bottom-nav-item"
           onClick={() => navigate("/MyProfilePage")}
         >
-          <AiOutlineUser size={28} color={isUser ? "orange" : "black"} />
+          <AiOutlineUser size={32} color={isUser ? "#fe9071" : "#222"} />
         </div>
       </div>
     </div>

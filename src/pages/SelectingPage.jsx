@@ -30,15 +30,22 @@ export default function SelectingPage() {
               }, 250); // 延迟 300 毫秒跳转
             }}
           >
-            <FcIdea size={64} style={{ marginBottom: "10px" }} />
-            <span>Looking for an object to chat with?</span>
+            <FcIdea size={72} style={{ marginBottom: "16px" }} />
+            <span style={{ fontSize: "22px" }}>
+              Looking for an object to chat with?
+            </span>
           </button>
           <button
             className="selection-btn-2"
             onClick={() => {
               setTimeout(() => {
                 navigate("/CameraPage", { state: { pmtOption: "noPrompt" } });
-              }, 250); // 延迟 300 毫秒跳转
+              }, 200); // 延迟 300 毫秒跳转
+            }}
+            style={{
+              fontSize: "20px",
+              color: "#333",
+              marginTop: "8px",
             }}
           >
             I have an object in mind

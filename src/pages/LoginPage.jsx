@@ -59,7 +59,7 @@ export default function LoginPage() {
       console.log(pid, vcode, expectedVcode);
       // 登录成功：pId 和 vcode 都匹配
       if (expectedVcode && expectedVcode.Vcode === vcode.trim()) {
-        setResourceId(expectedVcode.resource_id); // 重新设置全局变量
+        setResourceId(expectedVcode.resource_id); // 重新设置全局变量，在resource.js里
         setLoginHint("Login successfully. Welcome!"); // 验证成功显示消息
 
         //去数据库查询，如果没有这个resource_id下的user，则创建一个
@@ -69,7 +69,7 @@ export default function LoginPage() {
         });
 
         setTimeout(() => {
-          navigate("/");
+          navigate("/", { replace: true });
         }, 1500);
       } else {
         setLoginHint("Login failed. Please retry.");
@@ -89,14 +89,18 @@ export default function LoginPage() {
   return (
     <div className="chat-list-container full-height">
       <div className="my-profile-page">
-        <h1 style={{ fontSize: "24px", padding: "64px", fontStyle: "italic" }}>
+        <h1
+          className="login-title"
+          style={{ fontSize: "28px", padding: "64px", fontStyle: "italic" }}
+        >
           ObChat!
         </h1>
         <div className="text-n-input">
           <p
             className="storytext"
             style={{
-              fontSize: "15px",
+              fontSize: "17px",
+              fontWeight: "500",
               paddingBottom: "8px",
               marginLeft: "8px",
             }}
@@ -121,7 +125,8 @@ export default function LoginPage() {
           <p
             className="storytext"
             style={{
-              fontSize: "15px",
+              fontSize: "17px",
+              fontWeight: "500",
               paddingTop: "24px",
               paddingBottom: "8px",
               marginLeft: "8px",
@@ -146,7 +151,7 @@ export default function LoginPage() {
         <p
           id="login-hint"
           style={{
-            fontSize: "14px",
+            fontSize: "16px",
             height: "24px",
             marginTop: "24px",
             marginBottom: "8px",
@@ -164,6 +169,7 @@ export default function LoginPage() {
             vcode.trim() && pid.trim() ? "active" : "disabled"
           }`}
           onClick={handleLogin}
+          style={{ height: "52px", fontSize: "20px" }}
         >
           Log in
         </button>

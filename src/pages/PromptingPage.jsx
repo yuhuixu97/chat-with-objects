@@ -90,29 +90,27 @@ export default function PromptingPage() {
   };
 
   const bgColor = [
-    "#ff7e5f", // 颜色1: 浅粉色
-    "#feb47b", // 颜色2: 温暖的橙色 (加深了一些)
-    "#00c6ff", // 颜色3: 天空蓝
-    "#0072ff", // 颜色4: 深蓝色
-    "#fcb69f", // 颜色5: 淡桃色 (加深了一些)
-    "#d4a5a5", // 颜色6: 浅灰红色
-    //"#56ab2f", // 颜色7: 草绿色
-    "#a8e063", // 颜色8: 亮绿色 (加深了一些)
-    "#2b5876", // 颜色9: 海蓝色
-    "#4e4376", // 颜色10: 深紫色
-    "#9d50bb", // 颜色11: 紫色
-    "#6e48aa", // 颜色12: 深紫色
-    "#FFC312", // 颜色13: 亮黄色 (加深了一些)
-    "#12CBC4", // 颜色14: 清新蓝色
-    "#FDA7DC", // 颜色15: 淡粉色 (加深了一些)
-    "#F79C42", // 颜色16: 橙色
-    //"#6a9e23", // 颜色17: 黄绿色
-    "#ED4C67", // 颜色18: 鲜艳红色
-    "#6F1E51", // 颜色19: 深紫色
-    "#1B1464", // 颜色20: 深蓝色
-    "#4B7BEC", // 颜色21: 明亮蓝色
-    "#6F7DFF", // 颜色22: 淡紫色 (加深了一些)
-    "#F8C291", // 颜色23: 温暖的杏色 (加深了一些)
+    "#e07a63", // 柔粉 → 加深
+    "#e29362", // 柔橙 → 加深
+    "#62b0cf", // 雾蓝 → 加深
+    "#4a7bb8", // 柔蓝 → 略加深
+    "#d49a87", // 杏粉 → 加深
+    "#b39a9a", // 柔灰红 → 稍暗
+    "#a4c47a", // 柔黄绿 → 稍暗
+    "#4e657a", // 柔灰蓝 → 稍暗
+    "#5b4e71", // 雾紫 → 加深
+    "#84638f", // 柔紫 → 稍深
+    "#73608b", // 暗紫灰 → 稍深
+    "#d9b358", // 柔黄 → 加深
+    "#72bcb9", // 雾青 → 稍深
+    "#e69abc", // 淡藕粉 → 加深
+    "#cc7e4e", // 柔橘棕 → 加深
+    "#c05a6d", // 柔莓红 → 稍深
+    "#6d4c67", // 柔紫灰 → 稍深
+    "#3d416e", // 静蓝灰 → 稍深
+    "#6880c7", // 柔蓝紫 → 加深
+    "#7d88c9", // 雾淡紫 → 稍深
+    "#daae90", // 柔暖杏 → 加深
   ];
 
   function setRandomTextGradient() {
@@ -122,13 +120,13 @@ export default function PromptingPage() {
     // 设置与背景颜色相似的阴影颜色
     const shadowColor = random; // 使用相同的颜色作为阴影颜色
     /* 水平偏移、垂直偏移、模糊半径、阴影颜色 */
-    element.style.boxShadow = `0px 12px 16px rgba(${parseInt(
+    element.style.boxShadow = `0px 64px 52px -30px rgba(${parseInt(
       shadowColor.slice(1, 3),
       16
     )}, ${parseInt(shadowColor.slice(3, 5), 16)}, ${parseInt(
       shadowColor.slice(5, 7),
       16
-    )}, 0.2)`;
+    )}, 0.4)`;
   }
 
   return (
@@ -147,17 +145,18 @@ export default function PromptingPage() {
 
         <div className="main-area">
           <div className="prompting-page-block">
-            <p className="prompt-text">Pick an object that:</p>
+            <p className="prompt-text">Find an object that:</p>
           </div>
 
           <div
             className={`prompt-area ${isAnimating ? "pulse-animation" : ""}`}
           >
-            <div className="prompt-highlight">{currentPrompt}</div>
+            <div className="overlay-mask" />
+            <div className="prompt-highlight-text">{currentPrompt}</div>
           </div>
 
           <div className="prompting-page-block">
-            <p className="prompt-subtext">and take a photo of it.</p>
+            <p className="prompt-text">and take a photo of it.</p>
           </div>
 
           <div className="prompting-btn-area">

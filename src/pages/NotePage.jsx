@@ -23,6 +23,20 @@ export default function NotePage() {
     });
   }, []);
 
+  const textareaRef = useRef(null);
+  // 弹出键盘时聚焦到textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    const handleFocus = () => {
+      setTimeout(() => {
+        textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    };
+    textarea.addEventListener("focus", handleFocus);
+    return () => textarea.removeEventListener("focus", handleFocus);
+  }, []);
+
   const getUserData = (callback) => {
     $.ajax({
       url: "https://data.id.tue.nl/datasets/entity/14395/item/",
@@ -113,7 +127,7 @@ export default function NotePage() {
         <button
           className={`done-btn ${note ? "" : "disabled"}`}
           onClick={handleSend}
-          style={{ paddingRight: "0px" }}
+          style={{ right: "0px", paddingRight: "8px", paddingLeft: "8px" }}
           disabled={!note}
         >
           Send
@@ -124,7 +138,7 @@ export default function NotePage() {
         <div className="modal-overlay">
           <div className="modal">
             <h3>Note sent!</h3>
-            <p style={{ fontSize: "14px" }}>Returning to profile page...</p>
+            <p style={{ fontSize: "16px" }}>Returning to your profile...</p>
           </div>
         </div>
       )}
@@ -140,12 +154,13 @@ export default function NotePage() {
           </p>*/}
             {/* 文本框部分 */}
             <textarea
-              className="descriptives-input"
+              ref={textareaRef}
+              className="note-input"
               type="text"
               /*placeholder="Thought, feeling, reflection, feedback..."*/
               placeholder="Anything in your mind?"
               value={note}
-              style={{ fontSize: "18px" }}
+              style={{ fontSize: "17px", width: "296px", height: "300px" }}
               onChange={(e) => setNote(e.target.value)}
             />
           </div>

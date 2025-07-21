@@ -45,6 +45,7 @@ export default function ChatPage() {
   const [objectFacts, setObjectFacts] = useState(""); // 新增状态来保存更新后的 object facts
   const [userFacts, setUserFacts] = useState(""); // 新增状态来保存更新后的 user facts
   const [loading, setLoading] = useState(false);
+  const [objectEnvironment, setObjectEnvironment] = useState("");
   //const [resource_id, setResourceId] = useState("");
 
   //let resource_id = "uac633de71b774f31"; // developer
@@ -139,6 +140,19 @@ export default function ChatPage() {
     }
   };
 
+  // 弹出键盘时聚焦到textarea
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    const handleFocus = () => {
+      setTimeout(() => {
+        textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 100);
+    };
+    textarea.addEventListener("focus", handleFocus);
+    return () => textarea.removeEventListener("focus", handleFocus);
+  }, []);
+
   const getData = (conversationId) => {
     $.ajax({
       url: "https://data.id.tue.nl/datasets/entity/14395/item/",
@@ -163,6 +177,7 @@ export default function ChatPage() {
           setObjectChosenPrompt(chat.chosen_prompt); // 获取并设置 object chosenPrompt
           setUserFacts(chat.user_facts); // 获取并设置 user facts
           setObjectFacts(chat.object_facts); // 获取并设置 object facts
+          setObjectEnvironment(chat.object_environment);
 
           // 将历史消息格式化为 chatHistory
           const formattedHistory =
@@ -307,7 +322,7 @@ export default function ChatPage() {
         objectName,
         objectChosenPrompt,
         userFacts,
-        objectFacts
+        objectEnvironment
       );
       console.log("Prompt: ", prompt);
 
@@ -688,7 +703,7 @@ export default function ChatPage() {
               navigate("/ObjectEditingPage", { state: { conversation_id } })
             }
           >
-            <AiOutlineEllipsis size={24} />
+            <AiOutlineEllipsis size={26} />
           </button>
         </nav>
         <div className="chat-messages">

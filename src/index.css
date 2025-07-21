@@ -30,7 +30,7 @@ body {
   place-items: center;
   width: 100vw;
   max-width: 768px;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 h1 {
@@ -72,12 +72,12 @@ button:focus-visible {
 
 @media (max-width: 768px) {
   :root {
-    --vh: 100vh;
+    --vh: 100dvh;
   }
 }
 
 .full-height {
-  height: calc(var(--vh, 1vh) * 100);
+  height: calc(var(--vh, 1dvh) * 100);
 }
 
 /* 夜间模式 */
@@ -119,14 +119,14 @@ button:focus-visible {
   align-items: center;
   margin: 0 auto;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
 }
 
 .chat-page {
   width: calc(100vw - 32px);
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   background-color: #f5f5f5;
 }
 
@@ -161,7 +161,7 @@ button:focus-visible {
   height: 36px;
   min-width: 36px; /* 确保头像不会被压缩 */
   border-radius: 50%;
-  background-color: #007bff;
+  background-color: #999999;
   color: white;
   font-size: 18px;
   font-weight: bold;
@@ -186,7 +186,7 @@ button:focus-visible {
   /*padding: 12px;
   padding-top: 8px;
   padding-bottom: 10px;*/
-  border-radius: 4px;
+  border-radius: 6px;
   width: fit-content;
   /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
   word-wrap: break-word; /* 强制单词换行 */
@@ -224,7 +224,8 @@ button:focus-visible {
 
 .my-message .message-content {
   /*background: #85e49e;*/
-  background: #fad6a0;
+  /*background: #fad6a0;*/
+  background: linear-gradient(135deg, #fad6a0, #ffd1ab);
 }
 
 .message-text {
@@ -237,10 +238,10 @@ button:focus-visible {
   line-height: 1.38; /* 这里设置行间距 */
   hyphens: auto;
   white-space: normal;
-  color: #323232;
+  color: #333;
   padding: 12px;
   padding-top: 8px;
-  padding-bottom: 10px;
+  padding-bottom: 9px;
 }
 
 /* 输入框 */
@@ -282,7 +283,7 @@ button:focus-visible {
   width: 42px;
   height: 42px;
   /*background-color: #007bff;*/
-  background-color: #fe8f10;
+  /*background-color: #fe8f10;*/
   color: white;
   border: none;
   border-radius: 50%;
@@ -307,7 +308,8 @@ button:focus-visible {
 }
 
 .chat-input .send-button.active {
-  background-color: #fe8f10; /* 蓝色，表示可点击 */
+  background: linear-gradient(135deg, #ffc164, #fe586b);
+  /*background-color: #fe8f10; /* 蓝色，表示可点击 */
   cursor: pointer;
 }
 
@@ -339,7 +341,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   background-color: #f5f5f5;
   overflow: hidden; /* 防止页面本身滚动 */
 }
@@ -347,15 +349,28 @@ body {
 .chat-list-title {
   text-align: center;
   font-size: 20px;
-  font-weight: bold;
   font-style: italic;
+  font-weight: bold;
+  background: linear-gradient(
+    90deg,
+    #ee6b9f,
+    #f5863c
+  ); /* 可以换成你喜欢的渐变色 */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   /*margin-bottom: 20px;*/
+}
+
+.my-profile-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 /* 聊天列表 */
 .chat-list {
   width: 100%;
-  height: calc(100vh - 60px - 96px);
+  height: calc(100dvh - 60px - 96px);
   min-width: 340px; /* 保证不会被过度压缩 */
   max-width: 600px; /* 可选，防止在大屏设备上太宽 */
   margin: 0 auto; /* 如果用了 max-width，可以居中显示 */
@@ -391,7 +406,7 @@ body {
 .chat-card.highlighted {
   /*background-color: #fde2c6;
   border: 1px solid #ffc37e;*/
-  background: linear-gradient(135deg, #ffdea2, #ffca8e);
+  background: linear-gradient(135deg, #ffdea2, #ffa1b1);
 }
 
 /* 头像 */
@@ -399,6 +414,7 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  border: 0px solid #fff;
   background-color: #202020;
   color: white;
   font-size: 20px;
@@ -415,6 +431,7 @@ body {
   height: 100%;
   object-fit: cover; /* 让图片填满头像框 */
   border-radius: 50%;
+  border: 0px solid #fff;
 }
 
 /* 聊天信息 */
@@ -432,7 +449,7 @@ body {
 }
 
 .chat-preview {
-  max-width: 220px;
+  max-width: 236px;
   font-size: 16px;
   color: rgb(121, 121, 121);
   white-space: nowrap; /* 防止文本换行 */
@@ -454,10 +471,11 @@ body {
 }
 
 .my-profile-photo {
-  width: 104px; /* 容器的宽度 */
-  height: 104px; /* 容器的高度 */
+  width: 128px; /* 容器的宽度 */
+  height: 128px; /* 容器的高度 */
   overflow: hidden; /* 隐藏超出容器的部分 */
   border-radius: 50%; /* 圆形 */
+  object-fit: cover;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
@@ -477,33 +495,36 @@ body {
 }
 
 .my-profile-btn-avatar {
-  width: 216px;
+  margin-top: 4px;
   border: none;
+  padding: 4px 8px 6px 8px; /*上（top） 右（right） 下（bottom） 左（left）;*/
   font-weight: normal;
   font-family: inherit;
-  font-size: 15px;
+  font-size: 16px;
   color: #666;
   background-color: #f5f5f5;
   cursor: pointer;
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 (如果需要的话) */
-  margin: 2px;
 }
 
 .my-profile-btn-note {
-  width: 240px;
+  width: 256px;
+  height: 48px;
   border: none;
+  color: #222;
   background-color: #ffffff;
   cursor: pointer;
   display: flex;
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 (如果需要的话) */
   margin: 4px;
+  margin-top: 12px;
 }
 
 .my-profile-btn-logout {
-  width: 240px;
+  width: 256px;
   border: none;
   background-color: #ebebeb;
   cursor: pointer;
@@ -511,20 +532,23 @@ body {
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 (如果需要的话) */
   margin-top: 64px;
+  color: #222; /* 指定文字颜色 */
+  -webkit-appearance: none;
+  appearance: none;
+  text-decoration: none;
 }
 
 /* 新建聊天按钮 */
 .add-chat-btn {
   all: unset;
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
   align-self: center;
   border: none;
   border-radius: 50%;
   /*background-color: #007bff;*/
   /*background-color: #ffac4e;*/
-  background: linear-gradient(135deg, #ffcc70, #ff9113);
-
+  background: linear-gradient(135deg, #ffcf75, #fe586b);
   color: white;
   cursor: pointer;
   display: flex;
@@ -555,7 +579,7 @@ body {
   /*padding: 10px;*/
   flex-direction: column; /* 垂直排列 */
   align-items: center; /* 让按钮水平居中 */
-  height: 100vh; /* 占满整个视口高度，使其居中 */
+  height: 100dvh; /* 占满整个视口高度，使其居中 */
 }
 
 /*PromptingPage CSS---------------------------------------------------*/
@@ -565,7 +589,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start; /* 垂直从上往下排列 */
-  height: 100vh;
+  height: 100dvh;
   text-align: center;
   font-family: Arial, sans-serif;
   /*background-color: white;*/
@@ -573,27 +597,42 @@ body {
 }
 
 .prompt-text {
-  font-size: 18px;
-  color: #303030;
+  font-size: 20px;
+  font-weight: 500;
+  color: #0f131c;
   margin: 0;
 }
 
 .prompt-area {
   height: 200px;
-  width: 100%;
-  max-width: calc(100% - 32px);
+  width: calc(100% - 32px);
+  min-width: 311px;
+  max-width: 350px;
   display: flex;
+  box-sizing: border-box;
   align-items: center;
+  position: relative;
+  overflow: hidden;
   justify-content: center;
   border-radius: 8px;
   /* 添加阴影 */
-  box-shadow: 0px 16px 28px rgba(188, 188, 188, 0.1); /* 水平偏移、垂直偏移、模糊半径、阴影颜色 */
+  box-shadow: 0px 32px 40px rgba(188, 188, 188, 0.8); /* 水平偏移、垂直偏移、模糊半径、阴影颜色 */
 }
 
-.prompt-highlight {
-  font-size: 22px;
-  font-weight: bold;
-  font-family: inherit;
+.overlay-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%; /* 你可以根据需要调整 */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.05), transparent);
+  pointer-events: none; /* 让它不阻止鼠标交互 */
+  z-index: 2;
+}
+
+.prompt-highlight-text {
+  font-size: 24px;
+  font-family: "Times New Roman", Times, serif;
   margin: 10px 0;
   color: #ffffff;
   text-align: center;
@@ -603,21 +642,21 @@ body {
   word-break: break-word; /* 如果单词过长，则在单词内部换行 */
   white-space: normal; /* 允许换行 */
   /* max-width: 100%; 限制最大宽度 */
-  max-width: 220px;
+  max-width: 256px;
   overflow-wrap: break-word; /* 防止文字溢出 */
   box-sizing: border-box; /* 确保padding不会影响布局 */
 }
 
 .prompt-subtext {
   font-size: 18px;
-  color: #666;
+  color: #333;
   margin: 0;
 }
 
 .prompting-page-block {
   width: 100%;
   padding-top: 24px;
-  padding-bottom: 24px;
+  padding-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -644,7 +683,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start; /* 垂直从上往下排列 */
-  height: 100vh;
+  height: 100dvh;
   text-align: center;
   /*background-color: white;*/
   position: relative;
@@ -695,6 +734,7 @@ body {
   height: 120px; /* 容器的高度 */
   overflow: hidden; /* 隐藏超出容器的部分 */
   border-radius: 50%; /* 圆形 */
+  border: 1px solid #bdbdbd;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -717,9 +757,9 @@ body {
 }
 
 .prompting-regenerate-btn {
-  height: 80px;
-  width: 80px;
-  margin: 16px;
+  height: 96px;
+  width: 96px;
+  margin: 24px;
   background-color: #ffffff;
   border: none;
   padding: 8px;
@@ -737,10 +777,10 @@ body {
 }
 
 .prompting-camera-btn {
-  height: 80px;
-  width: 80px;
-  margin: 16px;
-  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+  height: 96px;
+  width: 96px;
+  margin: 24px;
+  background: linear-gradient(135deg, #ffcf75, #fe586b);
   border: none;
   padding: 8px;
   border-radius: 50%;
@@ -859,7 +899,7 @@ body {
 }
 
 .storytext {
-  font-size: 18px;
+  font-size: 20px;
   color: #333;
   text-align: left;
   margin: 0;
@@ -871,8 +911,8 @@ body {
 }
 
 .subtext {
-  font-size: 15px;
-  color: #666;
+  font-size: 16px;
+  color: #555;
   text-align: left;
   margin: 0;
   padding-top: 8px;
@@ -886,12 +926,12 @@ body {
   font-family: inherit; /* 设置字体为 Arial */
   flex-grow: 1;
   padding: 10px;
-  width: 264px;
-  font-size: 15px;
-  min-height: 88px;
+  width: 272px;
+  font-size: 17px;
+  min-height: 120px;
   border: none;
   border-radius: 8px;
-  resize: vertical; /* 允许用户垂直拖拽调整高度 */
+  resize: none;
 }
 
 .story-input::placeholder {
@@ -902,11 +942,11 @@ body {
 .name-input {
   font-family: inherit; /* 设置字体为 Arial */
   flex-grow: 1;
-  width: 264px;
+  width: 272px;
   padding: 10px;
   border: none;
   border-radius: 8px;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .name-input::placeholder {
@@ -918,15 +958,32 @@ body {
   font-family: inherit; /* 设置字体为 Arial */
   flex-grow: 1;
   padding: 10px;
-  width: 264px;
-  font-size: 15px;
+  width: 272px;
+  font-size: 17px;
   min-height: 120px;
+  resize: none;
   border: none;
   border-radius: 8px;
-  resize: vertical; /* 允许用户垂直拖拽调整高度 */
 }
 
 .descriptives-input::placeholder {
+  color: #c3c3c3; /* 灰色 */
+  opacity: 1; /* 防止有些浏览器默认透明 */
+}
+
+.note-input {
+  font-family: inherit; /* 设置字体为 Arial */
+  flex-grow: 1;
+  padding: 16px;
+  width: 272px;
+  font-size: 17px;
+  min-height: 120px;
+  resize: none;
+  border: none;
+  border-radius: 8px;
+}
+
+.note-input::placeholder {
   color: #c3c3c3; /* 灰色 */
   opacity: 1; /* 防止有些浏览器默认透明 */
 }
@@ -949,9 +1006,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -972,7 +1028,7 @@ body {
   align-items: center;
   /*margin: 0 auto;*/
   width: calc(100vw - 32px);
-  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
   overflow: hidden; /* 防止页面本身滚动 */
 }
 /*
@@ -1032,11 +1088,11 @@ body {
 
 .selection-btn {
   background-size: cover;
-  font-size: 18px;
+  font-size: 20px;
   height: 240px;
-  width: 256px;
+  width: 280px;
   /*background-color: #ffac4e;*/
-  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+  background: linear-gradient(135deg, #ffcf75, #fe586b);
   color: #ffffff;
   border: none;
   padding: 10px 20px;
@@ -1047,6 +1103,7 @@ body {
   justify-content: center;
   border-radius: 8px;
   cursor: pointer;
+  box-shadow: 0px 32px 52px -32px rgba(255, 10, 6, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
   /*box-shadow: 0px 16px 28px rgba(74, 74, 74, 0.1); /* 水平偏移、垂直偏移、模糊半径、阴影颜色 */
 }
@@ -1057,13 +1114,14 @@ body {
 }
 
 .selection-btn-2 {
-  height: 64px;
-  width: 256px;
+  height: 80px;
+  width: 280px;
   background-color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
   cursor: pointer;
+  box-shadow: 0px 32px 52px -32px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
@@ -1078,7 +1136,7 @@ body {
   align-items: center;
   background: black; /* 相机背景常用黑色 */
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   position: relative;
 }
@@ -1160,7 +1218,7 @@ body {
 
 .start-chat-btn {
   width: 215px;
-  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+  background: linear-gradient(135deg, #ffcf75, #fe586b);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -1184,7 +1242,7 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -1192,7 +1250,7 @@ body {
   width: calc(100vw - 32px);
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   background-color: #f5f5f5;
 }
 
@@ -1227,7 +1285,7 @@ body {
 }
 
 .avatar-item.selected {
-  background-color: #ffd7a9;
+  background: linear-gradient(135deg, #ffdea2, #ffa4c9);
   transform: scale(1.15);
 }
 
@@ -1250,7 +1308,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1327,7 +1385,7 @@ body {
   justify-content: center;
   /*margin: 0 auto;*/
   width: calc(100vw - 32px);
-  height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
   overflow: hidden; /* 防止页面本身滚动 */
 }
 
@@ -1366,7 +1424,7 @@ body {
 .login-button {
   width: 236px;
   border: none;
-  background: linear-gradient(135deg, #ffcc70, #ff8a00);
+  background: linear-gradient(135deg, #ffcf75, #fe586b);
   cursor: pointer;
   color: #ffffff;
   display: flex;
@@ -1374,6 +1432,20 @@ body {
   align-items: center; /* 垂直居中 (如果需要的话) */
   border-radius: 8px;
   transition: background-color 0.1s, transform 0.2s ease, filter 0.2s ease;
+}
+
+.login-title {
+  text-align: center;
+  font-style: italic;
+  font-weight: bold;
+  background: linear-gradient(
+    90deg,
+    #ee6b9f,
+    #f5863c
+  ); /* 可以换成你喜欢的渐变色 */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /*margin-bottom: 20px;*/
 }
 
 .login-button:active {

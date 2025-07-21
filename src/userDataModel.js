@@ -93,6 +93,7 @@ function addConversation(
   objectDescription,
   objectStory,
   chosenPrompt,
+  objectEnvironment,
   //photoToText,
   lastMessage,
   callback
@@ -126,6 +127,7 @@ function addConversation(
         object_facts: "",
         user_facts: "",
         chosen_prompt: chosenPrompt,
+        object_environment: objectEnvironment,
         //photo_to_text: photoToText,
         //lastMessage: lastMessage,
       };
