@@ -264,11 +264,7 @@ export default function ObjectEditingPage() {
           <button className="back-btn" onClick={handleBack}>
             <GoChevronLeft size={24} />
           </button>
-          <button
-            className="done-btn"
-            onClick={handleUpdate}
-            style={{ paddingRight: "0" }}
-          >
+          <button className="done-btn" onClick={handleUpdate}>
             Update
           </button>
         </div>

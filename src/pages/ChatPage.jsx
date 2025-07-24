@@ -46,6 +46,8 @@ export default function ChatPage() {
   const [userFacts, setUserFacts] = useState(""); // 新增状态来保存更新后的 user facts
   const [loading, setLoading] = useState(false);
   const [objectEnvironment, setObjectEnvironment] = useState("");
+  const [objectTraits, setObjectTraits] = useState("");
+  const [objectBehaviors, setObjectBehaviors] = useState("");
   //const [resource_id, setResourceId] = useState("");
 
   //let resource_id = "uac633de71b774f31"; // developer
@@ -145,9 +147,9 @@ export default function ChatPage() {
     const textarea = textareaRef.current;
     if (!textarea) return;
     const handleFocus = () => {
-      setTimeout(() => {
-        textarea.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 100);
+      //setTimeout(() => {
+      textarea.scrollIntoView({ behavior: "smooth", block: "center" });
+      //}, 100);
     };
     textarea.addEventListener("focus", handleFocus);
     return () => textarea.removeEventListener("focus", handleFocus);
@@ -178,6 +180,8 @@ export default function ChatPage() {
           setUserFacts(chat.user_facts); // 获取并设置 user facts
           setObjectFacts(chat.object_facts); // 获取并设置 object facts
           setObjectEnvironment(chat.object_environment);
+          setObjectTraits(chat.object_speculated_traits);
+          setObjectBehaviors(chat.object_speculated_behaviors);
 
           // 将历史消息格式化为 chatHistory
           const formattedHistory =
@@ -322,7 +326,9 @@ export default function ChatPage() {
         objectName,
         objectChosenPrompt,
         userFacts,
-        objectEnvironment
+        objectEnvironment,
+        objectTraits,
+        objectBehaviors
       );
       console.log("Prompt: ", prompt);
 

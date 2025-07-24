@@ -12,14 +12,17 @@ export default function NotePage() {
   const [user, setUser] = useState("");
   const [notes, setNotes] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   useEffect(() => {
     console.log("resource_id: ", resource_id);
     getUserData((user) => {
+      // 给 notes 设置默认值，避免为 null
+      const notes = user.notes ?? [];
       setUser(user);
+      setNotes(notes);
       console.log("Set user data: ", user);
-      setNotes(user.notes);
-      console.log("user.notes: ", user.notes);
+      console.log("user.notes: ", notes);
     });
   }, []);
 
@@ -109,10 +112,14 @@ export default function NotePage() {
     pushNote(note);
     //sendData(notes);
     //navigate("/GeneratingPage", { state: { note } });
-    setTimeout(() => {
+    /*setTimeout(() => {
       // 弹出窗口提醒更新完成，并延迟返回 chatPage
       navigate("/MyProfilePage");
-    }, 2000); // 延迟自动跳转
+    }, 2000); // 延迟自动跳转*/
+    setTimeout(() => {
+      setShowConfirmation(false); // 关闭弹窗
+      navigate(0); // 刷新当前页面（等价于 window.location.reload()）
+    }, 2000);
   };
 
   return (
@@ -138,12 +145,11 @@ export default function NotePage() {
         <div className="modal-overlay">
           <div className="modal">
             <h3>Note sent!</h3>
-            <p style={{ fontSize: "16px" }}>Returning to your profile...</p>
           </div>
         </div>
       )}
       <div className="note-page">
-        <div className="story-input-area" style={{ paddingTop: "8px" }}>
+        <div className="note-input-area" style={{ paddingTop: "8px" }}>
           <div>
             {/* 
           <p
@@ -160,10 +166,75 @@ export default function NotePage() {
               /*placeholder="Thought, feeling, reflection, feedback..."*/
               placeholder="Anything in your mind?"
               value={note}
-              style={{ fontSize: "17px", width: "296px", height: "300px" }}
+              style={{ fontSize: "17px", width: "296px", height: "240px" }}
               onChange={(e) => setNote(e.target.value)}
             />
           </div>
+        </div>
+        <div className="note-history" style={{ alignItems: "center" }}>
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              display: "flex",
+              marginBottom: "16px",
+              marginLeft: "16px",
+              cursor: "pointer",
+              background: "none",
+              border: "none",
+              color: "#222",
+              textDecoration: "underline",
+              padding: 0,
+              fontSize: "14px",
+              alignSelf: "flex-start",
+            }}
+          >
+            {collapsed ? "Show Note History" : "Hide Note History"}
+          </button>
+          {!collapsed && (
+            <div
+              className="note-history-notes"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "12px",
+              }}
+            >
+              {notes
+                .slice()
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .map((item, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      paddingBottom: "8px",
+                      width: "296px",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: "#888",
+                        fontSize: "14px",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {item.timestamp}
+                    </div>
+                    <div
+                      style={{
+                        wordWrap: "break-word",
+                        fontSize: "16px",
+                        color: "#888",
+                      }}
+                    >
+                      {item.note}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

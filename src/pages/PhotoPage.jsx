@@ -47,6 +47,7 @@ function base64ToBlobUrl(base64) {
 const getLocalAIResponse = (imageURL, promptToAI) => {
   //const fileImage = base64ToFile(imageURL);
   // console.log("fileImage: ", fileImage);
+  //console.log("imageURL: ", imageURL);
   const blobUrl = base64ToBlobUrl(imageURL);
   console.log("bolbUrl: ", blobUrl);
 
@@ -55,9 +56,10 @@ const getLocalAIResponse = (imageURL, promptToAI) => {
     foundry.imageToText({
       api_token: api_key_AI,
       server: "https://data.id.tue.nl",
-      model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
+      //model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
+      model: "llava-llama-3-8b-v1_1",
       prompt: promptToAI,
-      image: blobUrl,
+      image: imageURL,
       temperature: 0.2,
       maxTokens: 100,
       logging: true,
@@ -118,14 +120,28 @@ export default function PhotoPage() {
   const greeting = greetings[randomIndex];
 
   // 调用 photo-to-text，并赋值给 objectEnvironment
-  useEffect(() => {
+  /*useEffect(() => {
     if (imageUrl) {
-      console.log("imageUrl: ", imageUrl);
+      //console.log("imageUrl: ", imageUrl);
       extractObjectEnvironment(imageUrl).then((text) => {
         setObjectEnvironment(text);
       });
     }
-  }, [imageUrl]);
+  }, [imageUrl]);*/
+
+  const handleNext = async () => {
+    if (imageUrl) {
+      const text = await extractObjectEnvironment(imageUrl);
+      // setObjectEnvironment(text); // 如果你还需要保存状态的话
+      navigate("/StoryInputPage", {
+        state: { imageUrl, currentPrompt, pmtOption, objectEnvironment: text },
+      });
+    } else {
+      navigate("/StoryInputPage", {
+        state: { imageUrl, currentPrompt, pmtOption, objectEnvironment: null },
+      });
+    }
+  };
 
   return (
     <div
@@ -141,15 +157,7 @@ export default function PhotoPage() {
         >
           <GoChevronLeft size={24} />
         </button>
-        <button
-          className="done-btn"
-          onClick={() =>
-            navigate("/StoryInputPage", {
-              state: { imageUrl, currentPrompt, pmtOption, objectEnvironment },
-            })
-          }
-          style={{ paddingRight: "0" }}
-        >
+        <button className="done-btn" onClick={handleNext}>
           Next
         </button>
       </div>

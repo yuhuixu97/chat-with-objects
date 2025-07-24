@@ -3,6 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { addConversation } from "../userDataModel";
 import getImagetoText from "../getImagetoText";
 
+import {
+  objectTraitsSpeculator,
+  objectBehaviorSpeculator,
+} from "../objectIdentitySpeculator";
+
 export default function GeneratingPage() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,6 +38,13 @@ export default function GeneratingPage() {
     // 获取 localAI photo-to-text 返回文本
     //const photoToText = await getImagetoText(imageUrl);
 
+    // 处理生成 object traits 和 behaviors
+    const traits = await objectTraitsSpeculator(objectDescription, objectStory);
+    const behaviors = await objectBehaviorSpeculator(
+      objectDescription,
+      objectStory
+    );
+
     try {
       const newChat = await addConversation(
         objectName,
@@ -40,7 +52,9 @@ export default function GeneratingPage() {
         objectDescription,
         objectStory,
         currentPrompt,
-        objectEnvironment
+        objectEnvironment,
+        traits,
+        behaviors
         //photoToText
       ); // ✅ 确保 `await` 结果
 
@@ -127,6 +141,16 @@ export default function GeneratingPage() {
         {/* AI photo-to-text 返回文本容器（result-container-photo-to-text） */}
         <div
           id="result-container-photo-to-text"
+          style={{ display: "none" }}
+        ></div>
+        {/* AI 返回文本容器（result-container-objectTraits） */}
+        <div
+          id="result-container-objectTraits"
+          style={{ display: "none" }}
+        ></div>
+        {/* AI 返回文本容器（result-container-objectBehaviors） */}
+        <div
+          id="result-container-objectBehaviors"
           style={{ display: "none" }}
         ></div>
       </div>

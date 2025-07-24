@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: light;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
@@ -78,36 +78,6 @@ button:focus-visible {
 
 .full-height {
   height: calc(var(--vh, 1dvh) * 100);
-}
-
-/* 夜间模式 */
-@media (prefers-color-scheme: dark) {
-  .chat-page {
-    background-color: #181818;
-    color: #ffffff;
-  }
-
-  .message-content {
-    background-color: #2a2a2a;
-    color: #fff;
-  }
-
-  .bottom-navbar {
-    background-color: #181818;
-  }
-
-  .chat-preview {
-    color: #cccccc;
-  }
-
-  /* 箭头颜色适配 */
-  .back-btn {
-    color: #cccccc;
-  }
-
-  .done-btn {
-    color: #cccccc;
-  }
 }
 
 /*ChatPage --------------------------------*/
@@ -330,6 +300,10 @@ body {
   justify-content: center; /* 水平居中 */
   align-items: center; /* 垂直居中 */
   background-color: #f5f5f5;
+}
+
+html {
+  color-scheme: light;
 }
 
 /*ChatList --------------------------------*/
@@ -971,6 +945,16 @@ body {
   opacity: 1; /* 防止有些浏览器默认透明 */
 }
 
+.note-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /*margin: 0 auto;*/
+  width: calc(100vw - 32px);
+  height: calc(100dvh - 60px);
+  overflow: hidden; /* 防止页面本身滚动 */
+}
+
 .note-input {
   font-family: inherit; /* 设置字体为 Arial */
   flex-grow: 1;
@@ -981,6 +965,43 @@ body {
   resize: none;
   border: none;
   border-radius: 8px;
+  box-shadow: 0px 32px 52px -24px rgba(0, 0, 0, 0.14); /* 水平偏移、垂直偏移、模糊半径、阴影颜色 */
+}
+
+.note-input-area {
+  display: flex;
+  flex-direction: column; /* 子元素垂直排列 */
+  align-items: center; /* 水平居中对齐 */
+  text-align: center; /* 让文字等内容也居中 */
+  padding: 16px; /* 可选：增加内部空隙 */
+  box-sizing: border-box; /* 避免padding撑大容器 */
+  -ms-overflow-style: none; /* IE and Edge */
+  padding-top: 8px;
+  scrollbar-width: none;
+}
+
+.note-history {
+  display: flex;
+  width: 360px;
+  flex-direction: column; /* 子元素垂直排列 */
+  padding: 16px; /* 可选：增加内部空隙 */
+  box-sizing: border-box; /* 避免padding撑大容器 */
+  -ms-overflow-style: none; /* IE and Edge */
+  padding-top: 8px;
+  height: calc(100vh - 60px - 302px);
+}
+
+.note-history-notes {
+  display: flex;
+  width: 328px;
+  flex-direction: column; /* 子元素垂直排列 */
+  padding: 16px; /* 可选：增加内部空隙 */
+  box-sizing: border-box; /* 避免padding撑大容器 */
+  -ms-overflow-style: none; /* IE and Edge */
+  overflow-y: auto;
+  padding-top: 8px;
+  padding-bottom: 32px;
+  scrollbar-width: thin;
 }
 
 .note-input::placeholder {
@@ -1182,8 +1203,7 @@ body {
 /*完成按钮样式*/
 .nav-bar2 .done-btn {
   position: absolute;
-  right: 16px;
-  right: 16px;
+  right: 0px;
   background: none;
   border: none;
   font-size: 18px;
@@ -1339,6 +1359,7 @@ body {
   justify-content: space-around;
   align-items: center;
   flex-shrink: 0; /* 不压缩 */
+  box-shadow: 0px 16px 32px rgba(188, 188, 188, 0.7); /* 水平偏移、垂直偏移、模糊半径、阴影颜色 */
 }
 
 .bottom-nav-item {
@@ -1376,17 +1397,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.note-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /*margin: 0 auto;*/
-  width: calc(100vw - 32px);
-  height: calc(100dvh - 60px);
-  overflow: hidden; /* 防止页面本身滚动 */
 }
 
 .dot-loader {

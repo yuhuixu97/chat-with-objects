@@ -67,8 +67,8 @@ export default function CameraPage() {
 
     if (canvas && video) {
       const context = canvas.getContext("2d");
-      canvas.width = video.videoWidth / 2;
-      canvas.height = video.videoHeight / 2;
+      canvas.width = video.videoWidth / 1.5;
+      canvas.height = video.videoHeight / 1.5;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       const imageUrl = canvas.toDataURL("image/jpeg", 0.7);

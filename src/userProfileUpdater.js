@@ -28,13 +28,13 @@ export async function userFactsExtracter(chatHistory) {
 export async function integratedUserFacts(oldUserFacts, recentUserFacts) {
   const userProfileIntegrationPrompt = `
     You are integrating an object's long-term facts based on previous facts and new facts.
-    [Previous object facts]: ${oldUserFacts}
-    [New object facts]: ${recentUserFacts}
+    [Previous user facts]: ${oldUserFacts}
+    [New user facts]: ${recentUserFacts}
     Please integrate relevant new facts and retain old facts that are still relevant. Make the sentences concise. 
     Merge those similar ones. Keep the important ones. 
     Output Only the bullet points. 
 
-    Integrated object facts:
+    Integrated user facts:
     `;
 
   try {

@@ -8,8 +8,8 @@ export default function StoryInputPage() {
   const { imageUrl, currentPrompt, pmtOption, objectEnvironment } =
     location.state || {}; // 从 `location.state` 获取传递的图片 URL
   const [objectName, setObjectName] = useState(""); // 存储用户输入的 objectName
-  const [objectStory, setObjectStory] = useState(""); // 存储物品描述
   const [objectDescription, setObjectDescription] = useState(""); // 存储物品描述
+  const [objectStory, setObjectStory] = useState(""); // 存储物品描述
 
   const textareaRef = useRef(null);
 
@@ -31,7 +31,7 @@ export default function StoryInputPage() {
     return () => textarea.removeEventListener("focus", handleFocus);
   }, []);
 
-  const handleDone = () => {
+  const handleDone = async () => {
     if (!objectName.trim()) {
       alert("Please enter the object's name.");
       return;
@@ -66,7 +66,6 @@ export default function StoryInputPage() {
               objectName && objectDescription && objectStory ? "" : "disabled"
             }`}
             onClick={handleDone}
-            style={{ paddingRight: "0" }}
             disabled={!(objectName && objectDescription && objectStory)}
           >
             Done

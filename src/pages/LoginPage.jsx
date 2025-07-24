@@ -138,7 +138,7 @@ export default function LoginPage() {
           <input
             className="name-input"
             type="text"
-            placeholder='A 6-digit number like "ABC123"'
+            placeholder='A 6-digit code like "ABC123"'
             rows="1"
             cols="32"
             value={vcode}
