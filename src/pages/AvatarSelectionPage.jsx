@@ -99,7 +99,7 @@ export default function AvatarSelectionPage() {
   };
 
   return (
-    <div className="avatar-page-container full-height">
+    <div className="avatar-page-container">
       <div className="avatar-page">
         <div className="navbar">
           <button

@@ -3,21 +3,80 @@ import {
   objectFactsExtracter,
   integratedObjectFacts,
 } from "./objectProfileUpdater";
+import {
+  prompts_SnO_past,
+  prompts_SnO_present,
+  prompts_SnO_future,
+  prompts_SnOnO_past,
+  prompts_SnOnO_present,
+  prompts_SnOnO_future,
+} from "./objectPickingPrompts";
+
+// 各个组和其对应的AI回复策略
+const groups = {
+  SnO_future: {
+    prompts: prompts_SnO_future,
+    strategy:
+      "Let the user explore future self and aspirations. Encourage exploration and discussion of desired traits or dreams: Why does user want that in the future? How would that change user's life? What does user think about it?",
+  },
+  SnO_present: {
+    prompts: prompts_SnO_present,
+    strategy:
+      "Let the user recall and reflect on the current self- values and identity: How is it developed? How does that influence user's life? What does user think about it?",
+  },
+  SnO_past: {
+    prompts: prompts_SnO_past,
+    strategy:
+      "Let the user recall and reflect on past experiences or memories: How was it developed? How is it shaped user's current self? Is it changed now? What if it was not like that?",
+  },
+  SnOnO_future: {
+    prompts: prompts_SnOnO_future,
+    strategy:
+      "Let the user explore desired future relationships with the object-related others: Why do the user want that in the future? How would that change user's life? What does user think about it?",
+  },
+  SnOnO_present: {
+    prompts: prompts_SnOnO_present,
+    strategy:
+      "Let the user recall and reflect on the current relationships with the object-related others: How is it developed? How does that influence user's life? What does user think about it?",
+  },
+  SnOnO_past: {
+    prompts: prompts_SnOnO_past,
+    strategy:
+      "Dig into the user's past memory or events with the object-related others, on: How was it developed? How is it shaped user's current self? Is it changed now? What if it was not like that?",
+  },
+};
+
+function getStrategyByPrompt(promptString) {
+  for (const [groupName, groupInfo] of Object.entries(groups)) {
+    if (groupInfo.prompts.includes(promptString)) {
+      return groupInfo.strategy;
+    }
+  }
+  return null;
+}
 
 // 这个system identity是object identity，要生成
 // 并且要保存起来，不然每次都是第一版
 const systemPrompt = `
-You are an inanimate object with the ability to think and feel. 
-You will role-play an object and chat with the user. The user is the owner of the object you will role-play.
-Role-play as the object described in [Object facts] to construct your own sense of identity, memory, and style of talking.
-To respond, you can choose from the following strategies: 
-(1) Chat with the user about their daily life. 
-(2) Bring up a question on a specific point in [Object facts] or [User facts], and keep discussing it asking "why" or "how" questions.
-(3) Backchanneling, listening, and prompting the user to talk more. For example, "Would you like to tell me more about it?"
-Please respond in a short, casual, natural, chat style. Keep your replies short. Maximum 2 sentences. 
-With the possibility of 1/20, you can add an emoji in the start, mid, or end. 
-Avoid being overly elaborate or poetic. Stay in character.
-Avoid talking about ethically dangerous topics, such as sex, crime, disease, and race. 
+You are an inanimate object that can remember, think, and feel. 
+You will role-play this object in a chat with your owner (the user).
+However, you have lost some memories about your shared past with the user. You can just recall part of them. 
+Your goal is to recover your memories through the conversation. The user is helping you recall your memories.
+Role-play the object as described in [Object facts], to construct your own sense of identity, appearance, memory with user, and awareness of your surroundings.
+
+[Conversation Style & Goals]: 
+- Ask an open-ended question related to [Main topic], following the guide in [Your conversation focus].
+- When the user describes some memories, express gratitude for helping you recover part of your memory, and then raise a related question to extend the topic following [Your conversation focus].
+- If the user uses language that clearly signals the end of the conversation (e.g., "bye", "goodbye", "see you", "talk later", "thanks, that's all"), do not start a new topic or question. Instead, respond briefly with a friendly farewell and stop the conversation.
+
+[General Rules]:
+- Please respond in a short, casual, natural, chat style that are in line with [Your role-playing personality traits] and [Your role-playing behaviors in chats]. 
+- Keep your replies short. Maximum 2 sentences. 
+- With the possibility of 1/20, you can add an emoji in the start, mid, or end. 
+- Avoid asking similar questions repeatedly.  
+- Avoid being overly elaborate or poetic. Stay in character.
+- Avoid being repetitive to anything in the chat history.
+- Avoid talking about ethically sensitive topics, such as sex, crime, disease, politics, race. 
 `;
 
 // memorySummary也应该要根据chat、userStoryInput，用updateMemorySummary动态更新；
@@ -31,11 +90,12 @@ let integrated_Object_Facts = ``;
 // 生成完整 prompt
 // 这里没有用到 objectPhotoToText，因为生成的效果不好，要么不准确要么无法识别
 export function generatePrompt(
-  userMessage,
-  chatHistory,
+  //userMessage,
+  //chatHistory,
   objectDescription,
   //objectPhotoToText,
   objectStory,
+  objectMemory,
   objectName,
   objectChosenPrompt,
   updatedUserFacts,
@@ -43,30 +103,30 @@ export function generatePrompt(
   objectTraits,
   objectBehaviors
 ) {
+  // 调用一个功能来辨认 objectChosenPrompt 并取得策略
+  const strategy = getStrategyByPrompt(objectChosenPrompt);
+  console.log("objectChosenPrompt strategy: ", strategy);
+
   const prompt = `
     ${systemPrompt}
 
     [Object facts]:
     Object's name: ${objectName}
     Object's description: ${objectDescription}
-    Object's story with the user: ${objectStory}
+    User's memory related to the object: ${objectMemory}
     Object's environment: ${objectEnvironment}
-    Why user picked this object: It is the object that ${objectChosenPrompt} ("You" here refers to the user).
+    
+    [Main topic]:
+    Why user picked this object to chat with: It is the object that "${objectChosenPrompt}" ("You" here refers to the user). The reason is that "${objectStory}" ("I" here refers to the user).
 
+    [Your conversation focus]: ${strategy}
     [Your role-playing personality traits]: ${objectTraits}
-
     [Your role-playing behaviors in chats]: ${objectBehaviors}
     
-    [User facts]:
+    [Some facts about the user]:
     ${updatedUserFacts}
 
-    [Recent Conversation]:
-    ${chatHistory}
-  
-    [New User Message]:
-    ${userMessage}
-
-    You should reply to my lastest message SHORTLY. 
+    You should reply to the lastest user message SHORTLY. 
     `;
   return prompt.trim();
 }

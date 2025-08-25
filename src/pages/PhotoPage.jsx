@@ -32,7 +32,7 @@ const greetings = [
 }*/
 
 // 将 base64 格式的 imageUrl 转换为 bolbURL
-function base64ToBlobUrl(base64) {
+/*function base64ToBlobUrl(base64) {
   const byteString = atob(base64.split(",")[1]);
   const mimeString = base64.split(",")[0].split(":")[1].split(";")[0];
   const ab = new ArrayBuffer(byteString.length);
@@ -42,14 +42,14 @@ function base64ToBlobUrl(base64) {
   }
   const blob = new Blob([ab], { type: mimeString });
   return URL.createObjectURL(blob); // 返回 blob URL
-}
+}*/
 
 const getLocalAIResponse = (imageURL, promptToAI) => {
   //const fileImage = base64ToFile(imageURL);
   // console.log("fileImage: ", fileImage);
   //console.log("imageURL: ", imageURL);
-  const blobUrl = base64ToBlobUrl(imageURL);
-  console.log("bolbUrl: ", blobUrl);
+  //const blobUrl = base64ToBlobUrl(imageURL);
+  //console.log("bolbUrl: ", blobUrl);
 
   return new Promise((resolve, reject) => {
     // 调用 localAI API

@@ -16,6 +16,7 @@ export default function GeneratingPage() {
     objectName,
     objectDescription,
     objectStory,
+    objectMemory,
     currentPrompt,
     objectEnvironment,
   } = location.state || {}; // 获取物品名称和图片
@@ -51,6 +52,7 @@ export default function GeneratingPage() {
         imageUrl,
         objectDescription,
         objectStory,
+        objectMemory,
         currentPrompt,
         objectEnvironment,
         traits,

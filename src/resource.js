@@ -22,7 +22,7 @@ export const getResourceId = () => {
   if (!id) {
     console.warn("No resourceId, please login first.");
     // window.location.href = "/LoginPage"; // 未登录自动跳转。去chatlist page里做跳转
-    return null;
+    return;
   }
   console.log("ResourceId returned: ", id);
   return id;

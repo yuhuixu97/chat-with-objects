@@ -8,7 +8,7 @@ import { FcIdea } from "react-icons/fc";
 export default function SelectingPage() {
   const navigate = useNavigate();
   return (
-    <div className="chat-container full-height">
+    <div className="chat-container">
       <div className="chat-page">
         {/*<div className="prompting-container">*/}
         {/* 返回按钮 */}

@@ -89,14 +89,31 @@ export default function LoginPage() {
   return (
     <div className="chat-list-container full-height">
       <div className="my-profile-page">
-        <h1
-          className="login-title"
-          style={{ fontSize: "28px", padding: "64px", fontStyle: "italic" }}
-        >
-          ObChat!
-        </h1>
-        <div className="text-n-input">
+        <div>
+          <h1
+            className="login-title"
+            style={{
+              fontSize: "30px",
+              paddingTop: "48px",
+              paddingBottom: "12px",
+            }}
+          >
+            ObChat!
+          </h1>
           <p
+            style={{
+              paddingBottom: "36px",
+              margin: "0",
+              color: "#c0b5b5ff",
+              fontSize: "16px",
+              fontStyle: "italic",
+            }}
+          >
+            Help objects remember your stories.
+          </p>
+        </div>
+        <div className="text-n-input">
+          {/*<p
             className="storytext"
             style={{
               fontSize: "17px",
@@ -106,15 +123,16 @@ export default function LoginPage() {
             }}
           >
             Participant ID
-          </p>
+          </p>*/}
           {/* 文本框部分 */}
           <input
             className="name-input"
             type="text"
-            placeholder='A 4-digit ID like "P001"'
+            placeholder="Participant ID"
             rows="1"
             cols="32"
             value={pid}
+            style={{ marginTop: "12px" }}
             onChange={(e) => {
               setPid(e.target.value);
               handleInputChange(); // 清空提示消息
@@ -122,7 +140,7 @@ export default function LoginPage() {
           />
         </div>
         <div className="text-n-input">
-          <p
+          {/*<p
             className="storytext"
             style={{
               fontSize: "17px",
@@ -133,14 +151,15 @@ export default function LoginPage() {
             }}
           >
             Verification code
-          </p>
+          </p>*/}
           {/* 文本框部分 */}
           <input
             className="name-input"
             type="text"
-            placeholder='A 6-digit code like "ABC123"'
+            placeholder="Verification code"
             rows="1"
             cols="32"
+            style={{ marginTop: "12px" }}
             value={vcode}
             onChange={(e) => {
               setVcode(e.target.value);
@@ -169,7 +188,7 @@ export default function LoginPage() {
             vcode.trim() && pid.trim() ? "active" : "disabled"
           }`}
           onClick={handleLogin}
-          style={{ height: "52px", fontSize: "20px" }}
+          style={{ height: "46px", fontSize: "20px" }}
         >
           Log in
         </button>

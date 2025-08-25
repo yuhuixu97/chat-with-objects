@@ -39,6 +39,7 @@ export default function ChatPage() {
   const [objectImage, setObjectImage] = useState(""); // 新增状态来保存对象的 imageUrl
   const [userAvatar, setUserAvatar] = useState(null); // 新增状态来保存 user avatar imageUrl
   const [objectStory, setObjectStory] = useState(""); // 新增状态来保存 object 的 story
+  const [objectMemory, setObjectMemory] = useState("");
   const [objectDescription, setObjectDescription] = useState(""); // 新增状态来保存 object 的 descriptions
   //const [objectPhotoToText, setObjectPhotoToText] = useState(""); // 新增状态来保存 object 的 Photo-To-Text
   const [objectChosenPrompt, setObjectChosenPrompt] = useState(""); // 新增状态来保存挑选 object 时候的 prompt
@@ -48,6 +49,7 @@ export default function ChatPage() {
   const [objectEnvironment, setObjectEnvironment] = useState("");
   const [objectTraits, setObjectTraits] = useState("");
   const [objectBehaviors, setObjectBehaviors] = useState("");
+  const [jsonMessagesArray, setJsonMessagesArray] = useState("");
   //const [resource_id, setResourceId] = useState("");
 
   //let resource_id = "uac633de71b774f31"; // developer
@@ -64,10 +66,14 @@ export default function ChatPage() {
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
+  const endRef = useRef(null);
+  const messagesRef = useRef(null);
 
   // 所有的 chat history
   const [chatHistory, setchatHistory] = useState("");
   const [recentChatHistory, setrecentChatHistory] = useState("");
+
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   // 页面加载时获取 resource_id
   /*useEffect(() => {
@@ -110,9 +116,15 @@ export default function ChatPage() {
   }, [messages]); // 监听 messages 更新
 
   // 监听 messages 变化，并滚动到底部
-  useEffect(() => {
+  /*useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+    }
+  }, [messages]);*/
+  useEffect(() => {
+    if (messagesRef.current) {
+      //messagesRef.current.scrollIntoView({ behavior: "auto" });
+      messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -145,14 +157,52 @@ export default function ChatPage() {
   // 弹出键盘时聚焦到textarea
   useEffect(() => {
     const textarea = textareaRef.current;
-    if (!textarea) return;
+    /*if (!textarea) return;
     const handleFocus = () => {
-      //setTimeout(() => {
-      textarea.scrollIntoView({ behavior: "smooth", block: "center" });
-      //}, 100);
+      setTimeout(() => {
+        textarea.scrollIntoView({ behavior: "smooth", block: "end" });
+      }, 100);
+    };*/
+    const end = endRef.current;
+    if (!textarea || !end) return;
+    const handleFocus = () => {
+      setTimeout(() => {
+        end.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 100);
     };
     textarea.addEventListener("focus", handleFocus);
     return () => textarea.removeEventListener("focus", handleFocus);
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (messagesRef.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      } // 键盘弹出时自动滚到底
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // 获取键盘弹起高度，并调整chat-messages的高度
+  useEffect(() => {
+    const handleResize = () => {
+      const heightDiff = window.innerHeight - window.visualViewport.height;
+      const safeHeight = heightDiff > 100 ? heightDiff : 0;
+      console.log("safeHeight: ", safeHeight);
+      const chatMessagesEl = document.querySelector(".chat-page");
+      if (chatMessagesEl) {
+        const calculatedHeight = `calc(100dvh - ${safeHeight}px)`;
+        chatMessagesEl.style.height = calculatedHeight;
+      }
+      setKeyboardHeight(safeHeight);
+    };
+    window.visualViewport.addEventListener("resize", handleResize);
+    // 初始化执行一次（避免初始不准）
+    handleResize();
+    return () => {
+      window.visualViewport.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const getData = (conversationId) => {
@@ -175,6 +225,7 @@ export default function ChatPage() {
           setObjectImage(chat.avatar_url); // 获取并设置 imageUrl
           setObjectDescription(chat.object_descriptions); // 获取并设置 descriptions
           setObjectStory(chat.user_input_story); // 获取并设置 object story
+          setObjectMemory(chat.object_related_memory);
           //setObjectPhotoToText(chat.photo_to_text); // 获取并设置 object photo-to-text
           setObjectChosenPrompt(chat.chosen_prompt); // 获取并设置 object chosenPrompt
           setUserFacts(chat.user_facts); // 获取并设置 user facts
@@ -192,11 +243,11 @@ export default function ChatPage() {
               : "No messages yet.";
           setchatHistory(formattedHistory);
 
-          // 输出另一个版本为最近的15条消息，提供memory以及上下文
+          // 输出另一个版本为最近的20条消息，提供memory以及上下文
           const formattedRecentChatHistory =
             Array.isArray(chat.messages) && chat.messages.length > 0
               ? chat.messages
-                  .slice(-12) // 截取最后 15 条
+                  .slice(-20) // 截取最后 20 条
                   .map((msg) => `${msg.sender}: ${msg.content}`)
                   .join("\n")
               : "No messages yet.";
@@ -204,6 +255,20 @@ export default function ChatPage() {
           setrecentChatHistory(formattedRecentChatHistory);
 
           console.log("Chat history: ", formattedHistory);
+
+          // 整理为 JSON 格式的 array of messages，便于后续输入AI
+          const jsonMessages = formattedRecentChatHistory
+            .trim()
+            .split("\n")
+            .map((line) => {
+              const [speaker, ...rest] = line.split(":");
+              return {
+                role: speaker.trim() === "Me" ? "User" : "Object",
+                content: rest.join(":").trim(),
+              };
+            });
+          setJsonMessagesArray(jsonMessages);
+          console.log("jsonMessages array: ", jsonMessages); // jsonMessagesArray
         } else {
           console.warn(`Conversation ${conversation_id} not found.1`);
         }
@@ -313,16 +378,20 @@ export default function ChatPage() {
       setInput(""); // 清空输入框
 
       const textarea = document.querySelector(".chat-input textarea");
-      if (textarea) textarea.style.height = "auto";
+      if (textarea) {
+        textarea.style.height = "auto";
+        textarea.focus(); // 重点：让输入框保持焦点，防止键盘收起
+      }
 
       // 生成 AI 响应
       // 总的 prompt to AI
-      const prompt = generatePrompt(
-        input,
-        recentChatHistory,
+      const sysPrompt = generatePrompt(
+        //input,
+        //recentChatHistory,
         objectDescription,
         //objectPhotoToText,
         objectStory,
+        objectMemory,
         objectName,
         objectChosenPrompt,
         userFacts,
@@ -330,7 +399,7 @@ export default function ChatPage() {
         objectTraits,
         objectBehaviors
       );
-      console.log("Prompt: ", prompt);
+      console.log("sysPrompt: ", sysPrompt);
 
       /* 
       const updatedPrompt =
@@ -343,11 +412,25 @@ export default function ChatPage() {
       */
       //getLocalAIResponse(updatedPrompt);
 
+      // jsonMessagesArray 是JSON格式的消息记录。
+      // 现在需要把system prompt放入第一条消息，并作为system role
+
+      const integratedMessagesArray = [
+        { role: "system", content: sysPrompt },
+        ...jsonMessagesArray,
+        { role: "User", content: input },
+      ];
+
+      console.log("jsonMessagesArray: ", jsonMessagesArray);
+      console.log("integratedMessagesArray", integratedMessagesArray);
+
+      //现在的问题是，缺少了user最新的输入
+
       try {
-        await getLocalAIResponse(prompt); // <-- 等AI返回
+        //await getLocalAIResponse(sysPrompt); // <-- 等AI返回
+        await getLocalAIResponse(integratedMessagesArray);
       } catch (error) {
         console.error("Error fetching AI response:", error);
-        // 可以根据需要提示用户
       }
 
       // 更新最近 12 条 chat messages
@@ -494,7 +577,8 @@ export default function ChatPage() {
         //model: "hermes-2-pro-llama-3-8b",
         model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
         //prompt: userInput + ", provide short reply",
-        prompt: promptToAI,
+        //prompt: promptToAI,
+        messages: promptToAI,
         temperature: 0.5,
         maxTokens: 100,
         logging: true,
@@ -672,18 +756,31 @@ export default function ChatPage() {
           //setMessages(chat.messages || []);
           //setObjectImage(chat.avatar_url); // 获取并设置 imageUrl
 
-          // 输出另一个版本为最近的15条消息，提供memory以及上下文
+          // 输出另一个版本为最近的20条消息，提供memory以及上下文
           const formattedRecentChatHistory =
             Array.isArray(chat.messages) && chat.messages.length > 0
               ? chat.messages
-                  .slice(-15) // 截取最后 15 条
+                  .slice(-20) // 截取最后 20 条
                   .map((msg) => `${msg.sender}: ${msg.content}`)
                   .join("\n")
               : "No messages yet.";
           //console.log("type of formattedHistory: ", typeof formattedHistory);
           setrecentChatHistory(formattedRecentChatHistory);
+          console.log("20 Chat history: ", formattedRecentChatHistory);
 
-          console.log("15 Chat history: ", formattedRecentChatHistory);
+          // 整理为 JSON 格式的 array of messages，便于后续输入AI
+          const jsonMessages = formattedRecentChatHistory
+            .trim()
+            .split("\n")
+            .map((line) => {
+              const [speaker, ...rest] = line.split(":");
+              return {
+                role: speaker.trim() === "Me" ? "User" : "Object",
+                content: rest.join(":").trim(),
+              };
+            });
+          setJsonMessagesArray(jsonMessages);
+          console.log("jsonMessages array: ", jsonMessages); // jsonMessagesArray
         } else {
           console.warn(`Conversation ${conversation_id} not found.`);
         }
@@ -696,23 +793,23 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="chat-container full-height">
+    <div className="chat-page-container">
       <div className="chat-page">
         <nav className="navbar">
           <button className="back-btn" onClick={() => navigate("/")}>
             <GoChevronLeft size={24} />
           </button>
           <header className="chat-header">{objectName}</header>
-          <button
+          {/* <button
             className="more-btn"
             onClick={() =>
               navigate("/ObjectEditingPage", { state: { conversation_id } })
             }
           >
             <AiOutlineEllipsis size={26} />
-          </button>
+          </button>*/}
         </nav>
-        <div className="chat-messages">
+        <div className="chat-messages" ref={messagesRef}>
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -758,7 +855,6 @@ export default function ChatPage() {
           id="result-container-objectProfile"
           style={{ display: "none" }}
         ></div>
-
         <div className="message-assistant">
           {loading && (
             <div className="typing-indicator">
@@ -785,6 +881,7 @@ export default function ChatPage() {
             <AiOutlineSend size={20} style={{ marginLeft: "2px" }} />
           </button>
         </div>
+        <div ref={endRef} /> {/* 滚动锚点 */}
       </div>
     </div>
   );

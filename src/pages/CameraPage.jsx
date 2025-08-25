@@ -6,6 +6,7 @@ import {} from "react-router-dom";
 import { GoChevronLeft } from "react-icons/go";
 import { AiFillCamera } from "react-icons/ai";
 import { GoSync } from "react-icons/go";
+import { HiOutlinePhoto } from "react-icons/hi2";
 
 export default function CameraPage() {
   const navigate = useNavigate();
@@ -81,6 +82,33 @@ export default function CameraPage() {
     }
   };
 
+  // 上传图片
+  const handleUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        // 创建一个 canvas 用于压缩
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        // 控制压缩比例（这里是宽高缩小为原来的 2/3）
+        const scale = 1 / 6;
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        // 压缩为 JPEG 格式，质量设为 0.5
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.4);
+        navigate("/PhotoPage", {
+          state: { imageUrl: compressedDataUrl, currentPrompt, pmtOption },
+        });
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
     <div className="camera-page full-height">
       <div className="nav-bar2" style={{ backgroundColor: "#1a1a1a" }}>
@@ -124,10 +152,22 @@ export default function CameraPage() {
       </div>
 
       <div className="camera-bottom-bar">
-        <div className="camera-bottom-bar-item"></div>
+        <div className="camera-bottom-bar-item">
+          {/*
+          <label htmlFor="upload-photo" className="reverse-camera-btn">
+            <HiOutlinePhoto size={34} />
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            id="upload-photo"
+            style={{ display: "none" }}
+            onChange={handleUpload}
+          />*/}
+        </div>
         <div className="camera-bottom-bar-item">
           <button className="photo-btn" onClick={takePhoto}>
-            <AiFillCamera size={32} />
+            <AiFillCamera size={30} />
           </button>
         </div>
         <div className="camera-bottom-bar-item">

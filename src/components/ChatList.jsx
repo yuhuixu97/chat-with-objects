@@ -44,7 +44,7 @@ const sendData = () => {
 };
 
 // fetch conversations
-const getData = (callback) => {
+const getData = (resource_id, callback) => {
   $.ajax({
     url: "https://data.id.tue.nl/datasets/entity/14395/item/",
     headers: {
@@ -87,7 +87,8 @@ export default function ChatList() {
     resource_id = getResourceId(); // 进来先get resource id，默认是开发者账户 P001，所以会有问题。
     console.log("resource_id: ", resource_id);
     if (!resource_id) {
-      navigate("/LoginPage");
+      //navigate("/LoginPage");
+      navigate("/OnboardingPage");
       console.log("returning to login page");
       return;
     }
@@ -95,7 +96,7 @@ export default function ChatList() {
     //setResourceId(id);
     //console.log("resource_id: ", id);
 
-    getData((conversations) => {
+    getData(resource_id, (conversations) => {
       setChats(conversations); // 更新聊天列表，这是 user 层面的 conversations
       console.log("Chat set: ", conversations);
     });
@@ -103,9 +104,14 @@ export default function ChatList() {
 
   useEffect(() => {
     if (highlightId != null) {
-      chatsEndRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      setTimeout(() => {
+        chatsEndRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      }, 100); // 延迟一点时间，等 DOM 渲染完
     }
-  }, [highlightId]);
+  }, [highlightId, chats]);
 
   useEffect(() => {
     // 页面初始加载后清空 location.state
@@ -123,7 +129,9 @@ export default function ChatList() {
     //sendData(); // 这是专门用来更新matchingTable的，不常用
     setTimeout(() => {
       //navigate("/SelectingPage");
-      navigate("/SelectingPage");
+      navigate("/PromptingPage", {
+        state: { prompt: "", pmtOption: "yesPrompt" },
+      });
     }, 450); // 跳转延迟，和动画匹配
   };
 
@@ -189,15 +197,15 @@ export default function ChatList() {
             }}
           >
             <AiOutlineComment size={72} style={{ opacity: 0.2 }} />
-            <p style={{ opacity: 0.35, textAlign: "center", fontSize: "16px" }}>
+            <p style={{ opacity: 0.35, textAlign: "center", fontSize: "17px" }}>
               No chat with object yet.
             </p>
             <p
               style={{
-                fontSize: "16px",
+                fontSize: "17px",
                 opacity: 0.35,
                 textAlign: "center",
-                paddingTop: "144px",
+                paddingTop: "128px",
               }}
             >
               Click the "+" button

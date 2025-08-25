@@ -8,8 +8,11 @@ export default function StoryInputPage() {
   const { imageUrl, currentPrompt, pmtOption, objectEnvironment } =
     location.state || {}; // 从 `location.state` 获取传递的图片 URL
   const [objectName, setObjectName] = useState(""); // 存储用户输入的 objectName
-  const [objectDescription, setObjectDescription] = useState(""); // 存储物品描述
-  const [objectStory, setObjectStory] = useState(""); // 存储物品描述
+  //const [objectDescription, setObjectDescription] = useState(""); // 存储物品描述
+  const [objectDescription1, setObjectDescription1] = useState(""); // 存储物品描述
+  const [objectDescription2, setObjectDescription2] = useState(""); // 存储物品描述
+  const [objectStory, setObjectStory] = useState(""); // 存储物品选择原因
+  const [objectMemory, setObjectMemory] = useState(""); // 存储物品相关记忆
 
   const textareaRef = useRef(null);
 
@@ -37,12 +40,16 @@ export default function StoryInputPage() {
       return;
     }
 
+    const combinedDescription = objectDescription1 + " " + objectDescription2;
+    console.log("Combined objectDescription: ", combinedDescription);
+
     navigate("/GeneratingPage", {
       state: {
         imageUrl,
         objectName,
-        objectDescription,
+        objectDescription: combinedDescription,
         objectStory,
+        objectMemory,
         currentPrompt,
         objectEnvironment,
       },
@@ -63,10 +70,22 @@ export default function StoryInputPage() {
           </button>
           <button
             className={`done-btn ${
-              objectName && objectDescription && objectStory ? "" : "disabled"
+              objectName &&
+              objectDescription1 &&
+              objectDescription2 &&
+              objectStory
+                ? ""
+                : "disabled"
             }`}
             onClick={handleDone}
-            disabled={!(objectName && objectDescription && objectStory)}
+            disabled={
+              !(
+                objectName &&
+                objectDescription1 &&
+                objectDescription2 &&
+                objectStory
+              )
+            }
           >
             Done
           </button>
@@ -101,6 +120,7 @@ export default function StoryInputPage() {
               rows="1"
               cols="32"
               value={objectName}
+              style={{ width: "272px" }}
               onChange={(e) => setObjectName(e.target.value)}
             />
           </div>
@@ -118,28 +138,36 @@ export default function StoryInputPage() {
             <p
               className="subtext"
               style={{
-                padding: "0px",
-              }}
-            >
-              - Size, color, shape, function
-            </p>
-            <p
-              className="subtext"
-              style={{
                 paddingTop: "0px",
-                paddingBottom: "12px",
               }}
             >
-              - Impressions, feelings
+              - Size, color, shape, material?
             </p>
+
             {/* 文本框部分 */}
             <textarea
               ref={textareaRef}
               className="descriptives-input"
               type="text"
               //placeholder="- Size, color, shape, function..."
-              value={objectDescription}
-              onChange={(e) => setObjectDescription(e.target.value)}
+              value={objectDescription1}
+              onChange={(e) => setObjectDescription1(e.target.value)}
+            />
+            <p
+              className="subtext"
+              style={{
+                paddingTop: "4px",
+              }}
+            >
+              - Impressions, feelings?
+            </p>
+            <textarea
+              ref={textareaRef}
+              className="descriptives-input"
+              type="text"
+              //placeholder="- Size, color, shape, function..."
+              value={objectDescription2}
+              onChange={(e) => setObjectDescription2(e.target.value)}
             />
           </div>
           <div style={{ width: "292px", marginBottom: "32px" }}>
@@ -153,19 +181,39 @@ export default function StoryInputPage() {
             >
               Tell me about this object 😊
             </p>
-            <p
+            {/*<p
               className="subtext"
               style={{
                 padding: "0px",
               }}
             >
-              - First memory with it?
-            </p>
+              - Any shared experience with it?
+            </p>*/}
+            {/* 文本框部分 */}
             <p
               className="subtext"
               style={{
                 paddingTop: "0px",
-                paddingBottom: "12px",
+              }}
+            >
+              - A memory about it?
+            </p>
+            <textarea
+              className="story-input"
+              ref={textareaRef}
+              type="text"
+              /*placeholder={
+              currentPrompt
+                ? `- Your first memory with it?\n- Why "${currentPrompt}"?`
+                : "What is your story with the object?"
+            } // Why does the object "makes you feel happy"?*/
+              value={objectMemory}
+              onChange={(e) => setObjectMemory(e.target.value)}
+            />
+            <p
+              className="subtext"
+              style={{
+                paddingTop: "4px",
                 overflowWrap: "break-word",
               }}
             >
@@ -173,7 +221,6 @@ export default function StoryInputPage() {
                 ? `- Why "${currentPrompt}"?`
                 : "- What is your story with the object?"}
             </p>
-            {/* 文本框部分 */}
             <textarea
               className="story-input"
               ref={textareaRef}

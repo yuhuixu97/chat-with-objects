@@ -15,17 +15,6 @@ import { GoChevronLeft } from "react-icons/go";
 import { AiOutlineReload } from "react-icons/ai";
 import { AiOutlineCamera } from "react-icons/ai";
 
-// 定义提示文本数组
-const prompts = [
-  "Makes you happy",
-  "Brings you joy",
-  "Makes you feel calm",
-  "Makes you feel inspired",
-  "Reminds you of something special",
-  "Makes you feel nostalgic",
-  "Brings back good memories",
-];
-
 export default function PromptingPage() {
   const navigate = useNavigate();
 
@@ -130,15 +119,12 @@ export default function PromptingPage() {
   }
 
   return (
-    <div className="chat-container full-height">
+    <div className="chat-container">
       <div className="chat-page">
         {/*<div className="prompting-container">*/}
         {/* 返回按钮 */}
         <nav className="nav-bar2">
-          <button
-            className="back-btn"
-            onClick={() => navigate("/SelectingPage")}
-          >
+          <button className="back-btn" onClick={() => navigate("/")}>
             <GoChevronLeft size={24} />
           </button>
         </nav>

@@ -306,6 +306,7 @@ export default function ObjectEditingPage() {
               rows="1"
               cols="32"
               value={objectName}
+              style={{ width: "272px" }}
               onChange={(e) => setObjectName(e.target.value)}
             />
           </div>
@@ -326,7 +327,7 @@ export default function ObjectEditingPage() {
                 padding: "0px",
               }}
             >
-              - Size, color, shape, function
+              - Size, color, shape, material?
             </p>
             <p
               className="subtext"
@@ -335,7 +336,7 @@ export default function ObjectEditingPage() {
                 paddingBottom: "12px",
               }}
             >
-              - Impressions, feelings
+              - Impressions, feelings?
             </p>
             {/* 文本框部分 */}
             <textarea

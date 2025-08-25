@@ -29,7 +29,8 @@ export default function MyProfilePage() {
     resource_id = getResourceId(); // 页面加载时获取 resource_id
     console.log("Resource_id set: ", resource_id);
     if (!resource_id) {
-      navigate("/LoginPage");
+      //navigate("/LoginPage");
+      navigate("/OnboardingPage");
       return;
     }
     // 页面加载时执行
@@ -76,9 +77,15 @@ export default function MyProfilePage() {
   const handleLogout = () => {
     // 这里写退出逻辑，比如清除 token 或跳转登录页
     clearResourceId();
-    navigate("/LoginPage");
+    //navigate("/LoginPage");
+    navigate("/OnboardingPage"); // 直接每次都回退到 OnboardingPage
     console.log("User logged out");
   };
+
+  /*const handleOnboard = () => {
+    localStorage.setItem("hasSeenOnboarding", "false"); // 重置开屏页为没看过
+    navigate("/OnboardingPage"); // 跳转到登录页
+  };*/
 
   return (
     <div className="chat-list-container full-height">

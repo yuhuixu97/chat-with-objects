@@ -1,13 +1,20 @@
 const api_key_AI =
   "df-aGlQOG1TcDVnRVZOS0FCRHVVOCtxZlBGVHFCeW1zV3l2V2tGTWhVc3RIVT0=";
 
+/*You are an assistant who is good at extracting facts.
+  Given the following conversations, extract only the facts of the "user" in a few bullet points. 
+  Focus on the user's informational facts, personality, preferences, habits, conversation style. Make the sentences concise.  
+  Output only the bullet points.  */
 // 用来在后台自动更新 memoryPrompt 里的 user profile facts。
 export async function userFactsExtracter(chatHistory) {
   const userFactsExtractingPrompt = `
-  You are an assistant who is good at extracting facts.
-  Given the following conversations, extract only the facts of the "user" in a few bullet points. 
-  Focus on the user's informational facts, personality, preferences, habits, conversation style. Make the sentences concise.  
-  Output Only the bullet points. 
+  You are a fact extractor assistant. Given the following conversation, extract only concise, factual bullet points about the user. Focus on user's:
+  1) identity (e.g. occupation, role, age group if clear)
+  2) emotional state
+  3) preferences and habits
+  4) conversation style
+  5) recurring behaviors or attitudes
+  Avoid speculation, duplication, or vague language. Each bullet should be fact-based, concise, and informative. Output only the bullet points.
   
   Conversation:
   ${chatHistory}
@@ -32,7 +39,7 @@ export async function integratedUserFacts(oldUserFacts, recentUserFacts) {
     [New user facts]: ${recentUserFacts}
     Please integrate relevant new facts and retain old facts that are still relevant. Make the sentences concise. 
     Merge those similar ones. Keep the important ones. 
-    Output Only the bullet points. 
+    Output less than 10 bullet points. Output only the results. 
 
     Integrated user facts:
     `;
@@ -57,7 +64,7 @@ const getLocalAIResponse = (promptToAI) => {
       model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
       prompt: promptToAI,
       temperature: 0.1,
-      maxTokens: 2000,
+      maxTokens: 300,
       //logging: true,
       //loadingElementSelector: "#loading-indicator",
       resultElementSelector: "#result-container-userProfile",
