@@ -141,6 +141,7 @@ export default function CameraPage() {
             paddingLeft: "20px",
             paddingRight: "20px",
             marginTop: "8px",
+            marginBottom: "8px",
             fontSize: "17px",
           }}
         >
@@ -171,10 +172,10 @@ export default function CameraPage() {
           </button>
         </div>
         <div className="camera-bottom-bar-item">
-          {/* 👇 切换摄像头按钮 */}
+          {/* 👇 切换摄像头按钮 
           <button onClick={toggleCamera} className="reverse-camera-btn">
             <GoSync size={32} />
-          </button>
+          </button>*/}
         </div>
       </div>
 

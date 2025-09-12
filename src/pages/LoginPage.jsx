@@ -94,13 +94,13 @@ export default function LoginPage() {
             className="login-title"
             style={{
               fontSize: "30px",
-              paddingTop: "48px",
+              paddingTop: "32px",
               paddingBottom: "12px",
             }}
           >
             ObChat!
           </h1>
-          <p
+          {/*<p
             style={{
               paddingBottom: "36px",
               margin: "0",
@@ -110,7 +110,7 @@ export default function LoginPage() {
             }}
           >
             Help objects remember your stories.
-          </p>
+          </p>*/}
         </div>
         <div className="text-n-input">
           {/*<p
@@ -188,7 +188,7 @@ export default function LoginPage() {
             vcode.trim() && pid.trim() ? "active" : "disabled"
           }`}
           onClick={handleLogin}
-          style={{ height: "46px", fontSize: "20px" }}
+          style={{ height: "56px", fontSize: "20px" }}
         >
           Log in
         </button>

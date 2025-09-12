@@ -108,7 +108,7 @@ export default function AvatarSelectionPage() {
           >
             <GoChevronLeft size={24} />
           </button>
-          <header className="chat-header">Select your avatar</header>
+          <header className="chat-header">Change your avatar</header>
           {selectedAvatar && (
             <button onClick={handleDoneClick} className="done-btn">
               Done
@@ -118,7 +118,7 @@ export default function AvatarSelectionPage() {
           {showConfirmation && (
             <div className="modal-overlay">
               <div className="modal">
-                <h3>Your avatar is set!</h3>
+                <h3 style={{ color: "#222222" }}>Your avatar is set!</h3>
                 <img
                   src={`https://api.dicebear.com/9.x/adventurer/svg?seed=${selectedAvatar}`}
                   alt="Selected Avatar"

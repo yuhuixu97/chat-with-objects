@@ -87,8 +87,8 @@ export default function ChatList() {
     resource_id = getResourceId(); // 进来先get resource id，默认是开发者账户 P001，所以会有问题。
     console.log("resource_id: ", resource_id);
     if (!resource_id) {
-      //navigate("/LoginPage");
-      navigate("/OnboardingPage");
+      navigate("/LoginPage");
+      //navigate("/OnboardingPage");
       console.log("returning to login page");
       return;
     }
@@ -148,6 +148,51 @@ export default function ChatList() {
     console.log("User avatar clicked: ", chat.user_avatar_url);
   };
 
+  // timestamp
+  const formatTimestamp = (ts) => {
+    if (!ts) return "";
+    const date = new Date(ts);
+    const now = new Date();
+
+    // 去掉时分秒，只比较年月日
+    const dateOnly = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    if (dateOnly.getTime() === today.getTime()) {
+      // 今天 → 只显示时分
+      return (
+        "Today " +
+        date.toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      );
+    } else if (dateOnly.getTime() === yesterday.getTime()) {
+      // 昨天 → 显示 yesterday + 时分
+      return (
+        "Yesterday " +
+        date.toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      );
+    } else {
+      // 更早 → 显示日期
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+      });
+    }
+  };
+
   return (
     <div className="chat-list-container full-height">
       {/* 顶部导航栏 */}
@@ -177,7 +222,23 @@ export default function ChatList() {
                   )}
                 </div>
                 <div className="chat-info">
-                  <div className="chat-title">{chat.object_name}</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between", // 两端对齐
+                      alignItems: "center",
+                    }}
+                  >
+                    <div className="chat-title">{chat.object_name}</div>
+                    <div className="chat-info-timestamp">
+                      {chat.messages && chat.messages.length > 0
+                        ? formatTimestamp(
+                            chat.messages[chat.messages.length - 1].timestamp
+                          )
+                        : ""}
+                    </div>
+                  </div>
                   <div className="chat-preview">
                     {chat.messages && chat.messages.length > 0
                       ? chat.messages[chat.messages.length - 1].content
@@ -193,19 +254,26 @@ export default function ChatList() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center", // 横向居中
-              paddingTop: "128px",
+              paddingTop: "80px",
+              color: "#d2d2d2",
             }}
           >
-            <AiOutlineComment size={72} style={{ opacity: 0.2 }} />
-            <p style={{ opacity: 0.35, textAlign: "center", fontSize: "17px" }}>
+            <AiOutlineComment size={72} />
+            <p
+              style={{
+                color: "#bbb",
+                textAlign: "center",
+                fontSize: "17px",
+              }}
+            >
               No chat with object yet.
             </p>
             <p
               style={{
                 fontSize: "17px",
-                opacity: 0.35,
+                color: "#bbb",
                 textAlign: "center",
-                paddingTop: "128px",
+                paddingTop: "16px",
               }}
             >
               Click the "+" button
@@ -221,7 +289,7 @@ export default function ChatList() {
         {/* 固定底部的 New Chat 按钮 */}
         <div className="bottom-nav-item" onClick={() => navigate("/")}>
           <AiOutlineUnorderedList
-            size={32}
+            size={28}
             color={isList ? "#fe9071" : "#222"}
           />
         </div>
@@ -230,14 +298,14 @@ export default function ChatList() {
             className={`add-chat-btn ${clicked ? "clicked" : ""}`}
             onClick={handleButtonClick}
           >
-            <GoPlus size={36} />
+            <GoPlus size={32} />
           </button>
         </div>
         <div
           className="bottom-nav-item"
           onClick={() => navigate("/MyProfilePage")}
         >
-          <AiOutlineUser size={32} color={isUser ? "#fe9071" : "#222"} />
+          <AiOutlineUser size={28} color={isUser ? "#fe9071" : "#222"} />
         </div>
       </div>
     </div>

@@ -22,7 +22,7 @@ export default function OnboardingPage() {
 
   const handleFinish = () => {
     //localStorage.setItem("hasSeenOnboarding", "true"); // 记住用户已经看过
-    navigate("/LoginPage"); // 跳转到登录页
+    //navigate("/LoginPage"); // 跳转到登录页
   };
 
   return (

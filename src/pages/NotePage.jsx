@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { GoChevronLeft } from "react-icons/go";
 import { userDataModel } from "../userDataModel";
 import $ from "jquery";
+import { HiOutlinePhoto } from "react-icons/hi2";
+import { GoPlus } from "react-icons/go";
 
 export default function NotePage() {
   const navigate = useNavigate();
@@ -13,6 +15,7 @@ export default function NotePage() {
   const [notes, setNotes] = useState([]);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
+  const [images, setImages] = useState([]); // 用数组存多张图片
 
   useEffect(() => {
     console.log("resource_id: ", resource_id);
@@ -61,10 +64,25 @@ export default function NotePage() {
     });
   };
 
+  const formatDate = (date = new Date()) => {
+    const pad = (n) => String(n).padStart(2, "0");
+    return (
+      date.getFullYear() +
+      "-" +
+      pad(date.getMonth() + 1) +
+      "-" +
+      pad(date.getDate()) +
+      " " +
+      pad(date.getHours()) +
+      ":" +
+      pad(date.getMinutes())
+    );
+  };
+
   const pushNote = (input) => {
     const newNote = {
       note: input,
-      timestamp: new Date().toLocaleString(), // 设置时间戳
+      timestamp: formatDate(), // "2025-08-30 18:25" // 设置时间戳
     };
     console.log("newNote:", newNote);
 
@@ -106,9 +124,15 @@ export default function NotePage() {
     });
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     setShowConfirmation(true); // 弹窗
     // 更新数据库
+    try {
+      await uploadImages();
+      console.log("所有图片上传完成！");
+    } catch (error) {
+      console.error("上传出错:", error);
+    }
     pushNote(note);
     //sendData(notes);
     //navigate("/GeneratingPage", { state: { note } });
@@ -118,8 +142,64 @@ export default function NotePage() {
     }, 2000); // 延迟自动跳转*/
     setTimeout(() => {
       setShowConfirmation(false); // 关闭弹窗
-      navigate(0); // 刷新当前页面（等价于 window.location.reload()）
+      //navigate(0); // 刷新当前页面（等价于 window.location.reload()）
     }, 2000);
+  };
+
+  // 上传图片（到界面）
+  const handleUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    /*const reader = new FileReader();
+    reader.onload = (e) => {
+      const url = e.target.result; // 原始图片 DataURL
+      setImages((prev) => [...prev, url]); // 加入数组
+    };
+    reader.readAsDataURL(file);*/
+
+    // 保存 File 对象
+    setImages((prev) => [...prev, file]);
+  };
+
+  const handleDeleteImage = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // 上传 images 数组里的所有图片
+  const uploadImages = async () => {
+    for (let i = 0; i < images.length; i++) {
+      //const blob = dataURLtoBlob(images[i]);
+      const file = images[i];
+      const now = new Date();
+      const timestamp = now.toISOString().replace(/[:.]/g, "-");
+      const formData = new FormData();
+      const filename = `${resource_id}_image_${timestamp}.jpg`;
+      formData.append("file", file, filename); // 设置文件名
+
+      console.log(Array.from(formData.entries()));
+
+      const response = await fetch(
+        //"https://data.id.tue.nl/api/v1/datasets/media/14044", // 原来是http，改为了https
+        "https://df-demo.id.tue.nl/api/v1/datasets/media/54", // df-demo
+        {
+          method: "POST",
+          headers: {
+            api_token:
+              //"aDFxSEs1RnFPRkpLSk1kRzBaVWt5NE1HVmNsc3RoeXRyanU3UGJtbzNOZz0=", // DF
+              "eDI0ZE5iKy9MVVArUS9Yb2lVL2JIRUhkMitEY25GV3FBM3VkaEZ5Rm9uaz0=", // df-demo
+            participant_id: resource_id, // 可选
+          },
+          body: formData,
+        }
+      );
+
+      if (!response.ok) {
+        console.error(`Upload failed for image ${i}: ${response.status}`);
+      } else {
+        console.log(`Image ${i} uploaded successfully!`);
+      }
+    }
   };
 
   return (
@@ -128,7 +208,10 @@ export default function NotePage() {
         <button className="back-btn" onClick={() => navigate("/MyProfilePage")}>
           <GoChevronLeft size={24} />
         </button>
-        <header className="chat-header" style={{ fontWeight: "bold" }}>
+        <header
+          className="chat-header"
+          style={{ fontWeight: "bold", color: "#222222" }}
+        >
           Note
         </header>
         <button
@@ -144,31 +227,61 @@ export default function NotePage() {
       {showConfirmation && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Note sent!</h3>
+            <h3 style={{ color: "#222222" }}>Note sent!</h3>
           </div>
         </div>
       )}
       <div className="note-page">
-        <div className="note-input-area" style={{ paddingTop: "8px" }}>
+        <div className="note-input-area">
           <div>
-            {/* 
-          <p
-            className="storytext"
-            style={{ fontWeight: "500", marginBottom: "8px" }}
-          >
-            Anything in your mind?
-          </p>*/}
             {/* 文本框部分 */}
             <textarea
               ref={textareaRef}
               className="note-input"
               type="text"
               /*placeholder="Thought, feeling, reflection, feedback..."*/
-              placeholder="Anything in your mind?"
+              placeholder="Anything in your mind? 🖊️"
               value={note}
-              style={{ fontSize: "17px", width: "296px", height: "240px" }}
               onChange={(e) => setNote(e.target.value)}
             />
+            <div className="upload-image">
+              <label htmlFor="upload-photo" className="reverse-camera-btn">
+                <GoPlus
+                  size={64}
+                  style={{
+                    color: "#d2d2d2ff",
+                  }}
+                />
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                id="upload-photo"
+                style={{ display: "none" }}
+                onChange={handleUpload}
+              />
+              <div className="note-image-display">
+                {/* 
+                {imageUrl && (
+                  <img
+                    src={imageUrl}
+                    alt="Uploaded"
+                    className="note-image"
+                    onClick={handleDeleteImage}
+                  />
+                )}*/}
+                {images.map((img, index) => (
+                  <div key={index}>
+                    <img
+                      src={URL.createObjectURL(img)}
+                      alt={`upload-${index}`}
+                      className="note-image"
+                      onClick={() => handleDeleteImage(index)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
         <div className="note-history" style={{ alignItems: "center" }}>
@@ -184,6 +297,7 @@ export default function NotePage() {
               color: "#222",
               textDecoration: "underline",
               padding: 0,
+              paddingTop: "8px",
               fontSize: "14px",
               alignSelf: "flex-start",
             }}

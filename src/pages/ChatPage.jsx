@@ -185,12 +185,16 @@ export default function ChatPage() {
   }, []);
 
   // 获取键盘弹起高度，并调整chat-messages的高度
-  useEffect(() => {
+  /*useEffect(() => {
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (!isIOS) return;
+
     const handleResize = () => {
       const heightDiff = window.innerHeight - window.visualViewport.height;
       const safeHeight = heightDiff > 100 ? heightDiff : 0;
       console.log("safeHeight: ", safeHeight);
-      const chatMessagesEl = document.querySelector(".chat-page");
+      const chatMessagesEl = document.querySelector(".chat-page-container");
       if (chatMessagesEl) {
         const calculatedHeight = `calc(100dvh - ${safeHeight}px)`;
         chatMessagesEl.style.height = calculatedHeight;
@@ -203,7 +207,7 @@ export default function ChatPage() {
     return () => {
       window.visualViewport.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, []);*/
 
   const getData = (conversationId) => {
     $.ajax({
@@ -517,9 +521,7 @@ export default function ChatPage() {
       console.error("User conversations not loaded yet.");
       return;
     }
-
     // console.log("User: ", userConversations);
-
     // 找到该 conversation
     const conversation1 = userConversations.find(
       (conv) => String(conv.conversation_id) === String(conversationId)

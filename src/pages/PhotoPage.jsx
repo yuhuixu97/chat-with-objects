@@ -166,7 +166,8 @@ export default function PhotoPage() {
         style={{
           fontSize: "22px",
           marginBottom: "12px",
-          marginTop: "32px",
+          marginTop: "16px",
+          color: "#222222",
         }}
       >
         Photo of the object
@@ -178,6 +179,7 @@ export default function PhotoPage() {
             marginTop: "0",
             marginBottom: "24px",
             fontSize: "18px",
+            color: "#222222",
           }}
         >
           {currentPrompt}
@@ -191,8 +193,8 @@ export default function PhotoPage() {
           <div
             className="photo-display-round"
             style={{
-              width: "248px",
-              height: "248px",
+              width: "232px",
+              height: "232px",
               //outline: "12px solid #fff",
               boxShadow:
                 "0 0 0 12px #fff, 0px 32px 54px 8px rgba(0, 0, 0, 0.05)",
@@ -208,7 +210,14 @@ export default function PhotoPage() {
       ) : (
         <p>No photo available.</p>
       )}
-      <h3 style={{ fontSize: "20px", fontWeight: "500", marginBottom: "12px" }}>
+      <h3
+        style={{
+          fontSize: "20px",
+          fontWeight: "500",
+          marginBottom: "12px",
+          color: "#222222",
+        }}
+      >
         {greeting}
       </h3>
       {/* AI 返回文本容器（result-container） */}
