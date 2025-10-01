@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import $ from "jquery";
+import { parse, isValid, format } from "date-fns";
 import {
   userDataModel,
   addConversation,
@@ -99,17 +100,88 @@ export default function MyProfilePage() {
     });
   };
 
+  /*
+  // 工具函数：解析 timestamp
+  const parseTimestamp = (ts) => {
+    let date = new Date(ts);
+    // 如果 new Date 失败，尝试解析 "30.9.2025, 19:22:22"
+    if (isNaN(date.getTime())) {
+      const match = ts.match(
+        /^(\d{1,2})([./])(\d{1,2})\2(\d{4})[,\s]+(\d{1,2}):(\d{2})(?::(\d{2}))?$/
+      );
+
+      if (match) {
+        const [_, d, m, y, hh, mm, ss] = match;
+        date = new Date(
+          parseInt(y, 10),
+          parseInt(m, 10) - 1,
+          parseInt(d, 10),
+          parseInt(hh, 10),
+          parseInt(mm, 10),
+          ss ? parseInt(ss, 10) : 0
+        );
+      }
+    }
+    return isNaN(date.getTime()) ? null : date;
+  };
+
   // 统计有新消息的活跃天数
   const activeDaysCount = React.useMemo(() => {
     const daysSet = new Set();
     userConversations.forEach((conv) => {
       conv.messages.forEach((msg) => {
-        const date = new Date(msg.timestamp);
-        // 只保留日期部分，忽略时间
-        const dayString = date.toLocaleDateString("en-CA"); // 格式 yyyy-mm-dd
-        daysSet.add(dayString);
+        const date = parseTimestamp(msg.timestamp);
+        if (date) {
+          // 只保留日期部分，忽略时间
+          const dayString = date.toLocaleDateString("en-CA"); // 格式 yyyy-mm-dd
+          daysSet.add(dayString);
+        }
       });
     });
+    console.log("daysSet: ", daysSet);
+    return daysSet.size;
+  }, [userConversations]);
+  */
+
+  const parseTimestamp = (ts) => {
+    if (!ts) return null;
+
+    // 支持的时间格式
+    const formats = [
+      "d.M.yyyy, HH:mm:ss", // 30.9.2025, 19:22:22
+      "dd.MM.yyyy HH:mm:ss", // 28.09.2025 17:56:39
+      "dd/MM/yyyy, HH:mm:ss", // 29/09/2025, 17:39:03
+      "yyyy-MM-dd HH:mm:ss", // SQL/ISO 格式
+      "yyyy-MM-dd'T'HH:mm:ss", // ISO 带 T
+      "yyyy/M/d HH:mm:ss", // 2025/9/30 21:03:42
+      "d/M/yyyy, hh:mm:ss a", // 29/9/2025, 11:40:35 p.m.
+      "M/d/yyyy, hh:mm:ss a", // 9/30/2025, 2:31:46 PM （美国格式）
+    ];
+
+    for (const fmt of formats) {
+      const date = parse(ts, fmt, new Date());
+      if (isValid(date)) return date;
+    }
+
+    // 如果都解析不了，返回 null
+    return null;
+  };
+
+  // 统计有新消息的活跃天数
+  const activeDaysCount = React.useMemo(() => {
+    const daysSet = new Set();
+
+    userConversations.forEach((conv) => {
+      conv.messages.forEach((msg) => {
+        const date = parseTimestamp(msg.timestamp);
+        if (date) {
+          // 只保留日期部分
+          const dayString = format(date, "yyyy-MM-dd"); // 统一为 ISO 格式
+          daysSet.add(dayString);
+        }
+      });
+    });
+
     console.log("daysSet: ", daysSet);
     return daysSet.size;
   }, [userConversations]);

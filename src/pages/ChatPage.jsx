@@ -267,7 +267,7 @@ export default function ChatPage() {
             .map((line) => {
               const [speaker, ...rest] = line.split(":");
               return {
-                role: speaker.trim() === "Me" ? "User" : "Object",
+                role: speaker.trim() === "Me" ? "user" : "assistant", // "object"
                 content: rest.join(":").trim(),
               };
             });
@@ -332,7 +332,7 @@ export default function ChatPage() {
       // 如果和上次发送的消息相同，阻止重复添加
       if (lastMessageRef.current?.message_id === newMessage.message_id) {
         console.warn("Duplicate message detected, ignoring...");
-        setLoading(false);
+        //setLoading(false);
         return;
       }
       // 更新消息列表
@@ -422,7 +422,7 @@ export default function ChatPage() {
       const integratedMessagesArray = [
         { role: "system", content: sysPrompt },
         ...jsonMessagesArray,
-        { role: "User", content: input },
+        { role: "user", content: input },
       ];
 
       console.log("jsonMessagesArray: ", jsonMessagesArray);
@@ -576,8 +576,8 @@ export default function ChatPage() {
       foundry.textToText({
         api_token: api_key_AI,
         server: "https://data.id.tue.nl",
-        //model: "hermes-2-pro-llama-3-8b",
-        model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
+        model: "hermes-2-pro-llama-3-8b",
+        //model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
         //prompt: userInput + ", provide short reply",
         //prompt: promptToAI,
         messages: promptToAI,
@@ -777,7 +777,7 @@ export default function ChatPage() {
             .map((line) => {
               const [speaker, ...rest] = line.split(":");
               return {
-                role: speaker.trim() === "Me" ? "User" : "Object",
+                role: speaker.trim() === "me" ? "user" : "assistant", // "object"
                 content: rest.join(":").trim(),
               };
             });

@@ -4,10 +4,12 @@ const api_key_AI =
 // 用来在后台自动更新 memoryPrompt 里的 object profile facts。
 async function objectTraitsSpeculator(descriptions, stories) {
   const objectTraitsSpeculatingPrompt = `
-  The input includes descriptions of an object—its size, color, shape, function, impression, emotional impact, and personal story with the user. 
-  Based on this information, imagine the object could speak. 
-  Generate 3 anthropomorphic personality traits it might exhibit. 
-  Out put less than 50 words.
+  The input includes descriptions of an object: its size, color, shape, and function, and user's impression, emotional impact, and personal story to it. 
+  Based on these information, generate exactly 3 anthropomorphic personality traits it might exhibit. 
+  For each trait, give a very short reason (max 1 sentence). 
+  Output only a numbered list, each item less than 15 words.
+  If the input contains no details about the object at all, respond only with: "Insufficient information." 
+  Otherwise, always generate an answer based strictly on the given input, without inventing extra details.
   
   Input:
   ${(descriptions, ". ", stories)}
@@ -27,10 +29,13 @@ async function objectTraitsSpeculator(descriptions, stories) {
 
 async function objectBehaviorSpeculator(descriptions, stories) {
   const objectBehaviorSpeculatingPrompt = `
-  The input includes descriptions of an object—its size, color, shape, function, impression, emotional impact, and personal story with the user. 
-  Based on this information, imagine the object could speak. 
-  Speculate and tell me "how should the object behave in the upcoming chats?".  
-  Output only the behaviors 1-3 in less than 50 words.
+  The input includes descriptions of an object: its size, color, shape, and function, and user's impression, emotional impact, and personal story to it. 
+  Based on these information, generate exactly 3 anthropomorphic behaviors it might exhibit in the upcoming chats. 
+  For each behavior, give a very short reason (max 1 sentence).
+  Output only a numbered list, each item less than 15 words.
+  If the input contains no details about the object at all, respond only with: "Insufficient information." 
+  Otherwise, always generate an answer based strictly on the given input, without inventing extra details.
+  
   
   Input:
   ${(descriptions, ". ", stories)}
@@ -54,8 +59,8 @@ const getLocalAIResponse_traits = (promptToAI) => {
     foundry.textToText({
       api_token: api_key_AI,
       server: "https://data.id.tue.nl",
-      //model: "hermes-2-pro-llama-3-8b",
-      model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
+      model: "hermes-2-pro-llama-3-8b",
+      //model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
       prompt: promptToAI,
       temperature: 0.2,
       maxTokens: 100,
@@ -97,8 +102,8 @@ const getLocalAIResponse_bahaviors = (promptToAI) => {
     foundry.textToText({
       api_token: api_key_AI,
       server: "https://data.id.tue.nl",
-      //model: "hermes-2-pro-llama-3-8b",
-      model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
+      model: "hermes-2-pro-llama-3-8b",
+      //model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
       prompt: promptToAI,
       temperature: 0.2,
       maxTokens: 100,

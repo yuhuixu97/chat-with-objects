@@ -97,10 +97,11 @@ const getLocalAIResponse = (imageURL, promptToAI) => {
 const extractObjectEnvironment = async (imageUrl) => {
   // 调用 photo-to-text
   const promptToAI =
-    "Describe the objects and environment in the image in 30 words.";
+    "Describe the object and its background environment in the image. Your output should be limited within 40 words.";
 
   try {
     const text = await getLocalAIResponse(imageUrl, promptToAI); // 使用 await
+    //const text = "";
     console.log("Photo-to-text result: ", text);
     return text;
   } catch (err) {

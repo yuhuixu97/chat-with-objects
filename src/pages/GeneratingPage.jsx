@@ -24,7 +24,7 @@ export default function GeneratingPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       handleNewChat(); // 替换成你想跳转的路径
-    }, 4000); // 4000ms = 4秒
+    }, 3000); // 4000ms = 4秒
     console.log(
       "objectEnvironment passed to GeneratingPage from StoryInputPage: ",
       objectEnvironment

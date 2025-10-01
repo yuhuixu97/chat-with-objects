@@ -53,8 +53,8 @@ const getLocalAIResponse = (promptToAI) => {
     foundry.textToText({
       api_token: api_key_AI,
       server: "https://data.id.tue.nl",
-      //model: "hermes-2-pro-llama-3-8b",
-      model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
+      model: "hermes-2-pro-llama-3-8b",
+      //model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
       prompt: promptToAI,
       temperature: 0.1,
       maxTokens: 100,

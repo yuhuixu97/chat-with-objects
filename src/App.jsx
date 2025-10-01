@@ -14,7 +14,6 @@ import MyProfilePage from "./pages/MyProfilePage";
 import LoginPage from "./pages/LoginPage";
 import ObjectEditingPage from "./pages/ObjectEditingPage";
 import NotePage from "./pages/NotePage";
-import OnboardingPage from "./pages/OnboardingPage";
 
 // 所有页面跳转都要在这里注册一下
 function App() {
@@ -35,7 +34,6 @@ function App() {
         <Route path="/MyProfilePage" element={<MyProfilePage />} />
         <Route path="/ObjectEditingPage" element={<ObjectEditingPage />} />
         <Route path="/NotePage" element={<NotePage />} />
-        <Route path="/OnboardingPage" element={<OnboardingPage />} />
       </Routes>
     </Router>
   );

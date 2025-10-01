@@ -9,7 +9,7 @@ export default defineConfig({
     host: "0.0.0.0", // 允许局域网访问
     port: 5173,
     allowedHosts: [
-      "weight-mere-leaders-phones.trycloudflare.com", // 这里写 cloudflare 给的域名
+      "mazda-antibody-claims-revelation.trycloudflare.com", // 这里写 cloudflare 给的域名
     ],
   },
 });

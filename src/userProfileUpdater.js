@@ -6,16 +6,38 @@ const api_key_AI =
   Focus on the user's informational facts, personality, preferences, habits, conversation style. Make the sentences concise.  
   Output only the bullet points.  */
 // 用来在后台自动更新 memoryPrompt 里的 user profile facts。
-export async function userFactsExtracter(chatHistory) {
-  const userFactsExtractingPrompt = `
-  You are a fact extractor assistant. Given the following conversation, extract only concise, factual bullet points about the user. Focus on user's:
+
+/*
+You are a fact extractor assistant. Given the following conversation, extract only concise, factual bullet points about the user. Focus on user's:
   1) identity (e.g. occupation, role, age group if clear)
   2) emotional state
   3) preferences and habits
   4) conversation style
   5) recurring behaviors or attitudes
   Avoid speculation, duplication, or vague language. Each bullet should be fact-based, concise, and informative. Output only the bullet points.
-  
+ 
+*/
+
+export async function userFactsExtracter(chatHistory) {
+  const userFactsExtractingPrompt = `
+  You are a fact extractor assistant. 
+  Given the following conversation, extract only concise, factual bullet points about the user. 
+
+  Focus strictly on:  
+  1) Identity (e.g., occupation, role, age group if clearly stated)  
+  2) Emotional state (only if explicitly mentioned)  
+  3) Preferences and habits (e.g., likes, dislikes, routines)  
+  4) Conversation style (e.g., concise, detailed, humorous)  
+  5) Recurring behaviors or attitudes  
+
+  Rules:  
+  - Always process the given conversation, whether fictional or real.  
+  - Use only information explicitly present in the conversation.  
+  - Do not output generic facts like "the user is an individual."  
+  - Do not speculate or infer unstated details.  
+  - If no information is available for a category, write: "No information available."  
+  - Output only bullet points. Each point must be informative and specific.
+
   Conversation:
   ${chatHistory}
   
@@ -60,8 +82,8 @@ const getLocalAIResponse = (promptToAI) => {
     foundry.textToText({
       api_token: api_key_AI,
       server: "https://data.id.tue.nl",
-      //model: "hermes-2-pro-llama-3-8b",
-      model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
+      model: "hermes-2-pro-llama-3-8b",
+      //model: "fireball-meta-llama-3.2-8b-instruct-agent-003-128k-code-dpo",
       prompt: promptToAI,
       temperature: 0.1,
       maxTokens: 300,
